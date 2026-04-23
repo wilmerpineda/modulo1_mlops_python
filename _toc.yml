@@ -1,0 +1,31 @@
+format: jb-book
+root: intro
+
+parts:
+  - caption: Resultados de Aprendizaje y Caso de Estudio
+    chapters:
+    - file: resultados_aprendizaje
+    - file: caso_estudio
+  - caption: Unidad 1. Introducción a MLOps
+    chapters:
+    - file: unidad_1/01_panorama_mlops
+    - file: unidad_1/02_de_notebook_a_sistema
+  - caption: Unidad 2. Ciclo de vida del modelo
+    chapters:
+    - file: unidad_2/03_ciclo_vida_modelo
+    - file: unidad_2/04_pipeline_base_regresion
+  - caption: "Unidad 3. Git y GitHub"
+    chapters:
+      - file: unidad_3/05_git_fundamentos
+      - file: unidad_3/06_git_cheatsheet
+      - file: unidad_3/07_git_github_flujo_equipo
+  - caption: "Unidad 4. Gestión de entornos con Poetry"
+    chapters:
+      - file: unidad_4/08_poetry_fundamentos
+      - file: unidad_4/09_poetry_cheatsheet
+      - file: unidad_4/10_entornos_reproducibles
+  - caption: "Unidad 5. Reproducibilidad con DVC"
+    chapters:
+      - file: unidad_5/11_dvc_fundamentos
+      - file: unidad_5/12_dvc_cheatsheet
+      - file: unidad_5/13_pipeline_dvc
