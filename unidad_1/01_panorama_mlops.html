@@ -1,0 +1,790 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>🧭 Unidad 1: Panorama de MLOps &#8212; MLOps en Python</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'unidad_1/01_panorama_mlops';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="De notebook a sistema" href="02_de_notebook_a_sistema.html" />
+    <link rel="prev" title="🧩 Caso de Estudio: Predicción del Tiempo de Permanencia de Usuarios" href="../caso_estudio.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo_santoto.png" class="logo__image only-light" alt="MLOps en Python - Home"/>
+    <script>document.write(`<img src="../_static/logo_santoto.png" class="logo__image only-dark" alt="MLOps en Python - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    📘 Módulo 1: Fundamentos de MLOps y Gestión del Ciclo de Vida
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Resultados de Aprendizaje y Caso de Estudio</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../resultados_aprendizaje.html">🎯 Resultados de Aprendizaje del Módulo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../caso_estudio.html">🧩 Caso de Estudio: Predicción del Tiempo de Permanencia de Usuarios</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 1. Introducción a MLOps</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">🧭 Unidad 1: Panorama de MLOps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_de_notebook_a_sistema.html">De notebook a sistema</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 2. Ciclo de vida del modelo</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_2/03_ciclo_vida_modelo.html">🔄 Unidad 2: Ciclo de Vida de un Modelo de Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_2/04_pipeline_base_regresion.html">Pipeline base de regresión</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 3. Git y GitHub</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_3/05_git_fundamentos.html">🔧 Unidad 3: Fundamentos de Git y GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_3/06_git_cheatsheet.html">🧾 Unidad 3: Git Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_3/07_git_github_flujo_equipo.html">Git y GitHub: flujo de trabajo en equipo</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 4. Gestión de entornos con Poetry</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_4/08_poetry_fundamentos.html">📦 Unidad 4: Fundamentos de gestión de entornos con Poetry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_4/09_poetry_cheatsheet.html">🧾 Unidad 4: Poetry Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_4/10_entornos_reproducibles.html">🔁 Unidad 4: Entornos reproducibles en proyectos de Machine Learning</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 5. Reproducibilidad con DVC</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_5/11_dvc_fundamentos.html">📦 Unidad 5: Fundamentos de versionamiento de datos con DVC</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/unidad_1/01_panorama_mlops.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>🧭 Unidad 1: Panorama de MLOps</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#que-es-mlops">🔍 ¿Qué es MLOps?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#el-problema-tradicional">⚠️ El problema tradicional</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cuando-intentamos-escalar">🚨 Cuando intentamos escalar</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#el-cambio-de-mentalidad">🧠 El cambio de mentalidad</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flujo-mlops-vision-general">🔄 Flujo MLOps (visión general)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#componentes-clave-de-mlops">🧩 Componentes clave de MLOps</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#versionamiento-de-codigo">🔹 1. Versionamiento de código</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gestion-de-entornos">🔹 2. Gestión de entornos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#versionamiento-de-datos">🔹 3. Versionamiento de datos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tracking-de-experimentos">🔹 4. Tracking de experimentos</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-science-vs-mlops">⚖️ Data Science vs MLOps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ejemplo-conceptual">🧪 Ejemplo conceptual</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enfoque-tradicional">🔴 Enfoque tradicional</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enfoque-mlops">🟢 Enfoque MLOps</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conexion-con-este-modulo">🔗 Conexión con este módulo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lo-que-viene-a-continuacion">🚀 Lo que viene a continuación</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#idea-clave-para-llevar">🎯 Idea clave para llevar</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="unidad-1-panorama-de-mlops">
+<h1>🧭 Unidad 1: Panorama de MLOps<a class="headerlink" href="#unidad-1-panorama-de-mlops" title="Link to this heading">#</a></h1>
+<section id="que-es-mlops">
+<h2>🔍 ¿Qué es MLOps?<a class="headerlink" href="#que-es-mlops" title="Link to this heading">#</a></h2>
+<p>MLOps (Machine Learning Operations) es un conjunto de prácticas que busca integrar:</p>
+<ul class="simple">
+<li><p><strong>Ciencia de datos</strong></p></li>
+<li><p><strong>Ingeniería de software</strong></p></li>
+<li><p><strong>DevOps</strong></p></li>
+</ul>
+<p>con el objetivo de construir sistemas de Machine Learning que sean:</p>
+<ul class="simple">
+<li><p>reproducibles,</p></li>
+<li><p>escalables,</p></li>
+<li><p>mantenibles,</p></li>
+<li><p>y colaborativos.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="el-problema-tradicional">
+<h2>⚠️ El problema tradicional<a class="headerlink" href="#el-problema-tradicional" title="Link to this heading">#</a></h2>
+<p>En muchos proyectos de ciencia de datos, el flujo típico es el siguiente:</p>
+<div class="highlight-mermaid notranslate"><div class="highlight"><pre><span></span>flowchart LR
+    A[Datos] --&gt; B[Notebook]
+    B --&gt; C[Modelo]
+    C --&gt; D[Resultados]
+</pre></div>
+</div>
+<p>Este enfoque funciona en etapas exploratorias, pero presenta limitaciones críticas:</p>
+<ul class="simple">
+<li><p>el código no está estructurado;</p></li>
+<li><p>los datos no están versionados;</p></li>
+<li><p>los experimentos no son trazables;</p></li>
+<li><p>los resultados no son reproducibles;</p></li>
+<li><p>no hay colaboración organizada.</p></li>
+</ul>
+<p>👉 En resumen: <strong>el modelo funciona, pero el proceso no.</strong></p>
+</section>
+<hr class="docutils" />
+<section id="cuando-intentamos-escalar">
+<h2>🚨 Cuando intentamos escalar<a class="headerlink" href="#cuando-intentamos-escalar" title="Link to this heading">#</a></h2>
+<p>Cuando este modelo se intenta llevar a producción, el flujo se rompe:</p>
+<div class="highlight-mermaid notranslate"><div class="highlight"><pre><span></span>flowchart LR
+    A[Datos iniciales] --&gt; B[Notebook]
+    B --&gt; C[Modelo entrenado]
+    C --&gt; D[Resultados prometedores]
+    D --&gt; E[Intento de reproducción]
+    E --&gt; F[Resultados inconsistentes]
+</pre></div>
+</div>
+<p>Esto ocurre porque:</p>
+<ul class="simple">
+<li><p>no sabemos qué versión de los datos se usó;</p></li>
+<li><p>no conocemos los parámetros exactos;</p></li>
+<li><p>el entorno no es replicable;</p></li>
+<li><p>no existe un pipeline definido.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="el-cambio-de-mentalidad">
+<h2>🧠 El cambio de mentalidad<a class="headerlink" href="#el-cambio-de-mentalidad" title="Link to this heading">#</a></h2>
+<p>MLOps propone un cambio fundamental:</p>
+<blockquote>
+<div><p>❗ Pasar de construir modelos a construir sistemas.</p>
+</div></blockquote>
+<p>Esto implica pensar en:</p>
+<ul class="simple">
+<li><p>flujos de trabajo completos;</p></li>
+<li><p>control de versiones;</p></li>
+<li><p>trazabilidad;</p></li>
+<li><p>automatización;</p></li>
+<li><p>colaboración.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="flujo-mlops-vision-general">
+<h2>🔄 Flujo MLOps (visión general)<a class="headerlink" href="#flujo-mlops-vision-general" title="Link to this heading">#</a></h2>
+<p>Un flujo típico de MLOps se ve así:</p>
+<div class="highlight-mermaid notranslate"><div class="highlight"><pre><span></span>flowchart LR
+    A[Datos] --&gt; B[Preprocesamiento]
+    B --&gt; C[Entrenamiento]
+    C --&gt; D[Evaluación]
+    D --&gt; E[Registro de Experimentos]
+    E --&gt; F[Modelo Seleccionado]
+    F --&gt; G[Despliegue]
+    G --&gt; H[Monitoreo]
+    H --&gt; A
+</pre></div>
+</div>
+<p>Este flujo introduce elementos clave:</p>
+<ul class="simple">
+<li><p>ciclo continuo;</p></li>
+<li><p>retroalimentación;</p></li>
+<li><p>control en cada etapa.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="componentes-clave-de-mlops">
+<h2>🧩 Componentes clave de MLOps<a class="headerlink" href="#componentes-clave-de-mlops" title="Link to this heading">#</a></h2>
+<section id="versionamiento-de-codigo">
+<h3>🔹 1. Versionamiento de código<a class="headerlink" href="#versionamiento-de-codigo" title="Link to this heading">#</a></h3>
+<p>Permite:</p>
+<ul class="simple">
+<li><p>rastrear cambios;</p></li>
+<li><p>colaborar en equipo;</p></li>
+<li><p>evitar sobrescrituras.</p></li>
+</ul>
+<p>👉 Herramienta: <strong>Git / GitHub</strong></p>
+</section>
+<hr class="docutils" />
+<section id="gestion-de-entornos">
+<h3>🔹 2. Gestión de entornos<a class="headerlink" href="#gestion-de-entornos" title="Link to this heading">#</a></h3>
+<p>Permite:</p>
+<ul class="simple">
+<li><p>reproducir ejecuciones;</p></li>
+<li><p>evitar conflictos de dependencias;</p></li>
+<li><p>garantizar consistencia.</p></li>
+</ul>
+<p>👉 Herramienta: <strong>Poetry</strong></p>
+</section>
+<hr class="docutils" />
+<section id="versionamiento-de-datos">
+<h3>🔹 3. Versionamiento de datos<a class="headerlink" href="#versionamiento-de-datos" title="Link to this heading">#</a></h3>
+<p>Permite:</p>
+<ul class="simple">
+<li><p>saber qué datos se usaron;</p></li>
+<li><p>reproducir experimentos;</p></li>
+<li><p>manejar datasets grandes.</p></li>
+</ul>
+<p>👉 Herramienta: <strong>DVC</strong></p>
+</section>
+<hr class="docutils" />
+<section id="tracking-de-experimentos">
+<h3>🔹 4. Tracking de experimentos<a class="headerlink" href="#tracking-de-experimentos" title="Link to this heading">#</a></h3>
+<p>Permite:</p>
+<ul class="simple">
+<li><p>comparar modelos;</p></li>
+<li><p>registrar métricas;</p></li>
+<li><p>guardar artefactos.</p></li>
+</ul>
+<p>👉 Herramienta: <strong>MLflow</strong></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="data-science-vs-mlops">
+<h2>⚖️ Data Science vs MLOps<a class="headerlink" href="#data-science-vs-mlops" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Aspecto</p></th>
+<th class="head"><p>Enfoque tradicional</p></th>
+<th class="head"><p>Enfoque MLOps</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Código</p></td>
+<td><p>Notebooks aislados</p></td>
+<td><p>Proyectos estructurados</p></td>
+</tr>
+<tr class="row-odd"><td><p>Datos</p></td>
+<td><p>Sin control de versiones</p></td>
+<td><p>Versionados</p></td>
+</tr>
+<tr class="row-even"><td><p>Experimentos</p></td>
+<td><p>Manuales</p></td>
+<td><p>Registrados</p></td>
+</tr>
+<tr class="row-odd"><td><p>Reproducibilidad</p></td>
+<td><p>Baja</p></td>
+<td><p>Alta</p></td>
+</tr>
+<tr class="row-even"><td><p>Colaboración</p></td>
+<td><p>Limitada</p></td>
+<td><p>Estructurada</p></td>
+</tr>
+<tr class="row-odd"><td><p>Escalabilidad</p></td>
+<td><p>Difícil</p></td>
+<td><p>Natural</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="ejemplo-conceptual">
+<h2>🧪 Ejemplo conceptual<a class="headerlink" href="#ejemplo-conceptual" title="Link to this heading">#</a></h2>
+<section id="enfoque-tradicional">
+<h3>🔴 Enfoque tradicional<a class="headerlink" href="#enfoque-tradicional" title="Link to this heading">#</a></h3>
+<p>Un científico de datos:</p>
+<ul class="simple">
+<li><p>carga datos localmente;</p></li>
+<li><p>entrena un modelo;</p></li>
+<li><p>guarda resultados manualmente.</p></li>
+</ul>
+<p>Problemas:</p>
+<ul class="simple">
+<li><p>nadie más puede reproducirlo;</p></li>
+<li><p>si cambia el dataset, no hay trazabilidad;</p></li>
+<li><p>si el modelo mejora, no hay historial.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="enfoque-mlops">
+<h3>🟢 Enfoque MLOps<a class="headerlink" href="#enfoque-mlops" title="Link to this heading">#</a></h3>
+<p>El equipo:</p>
+<ul class="simple">
+<li><p>versiona el código;</p></li>
+<li><p>versiona los datos;</p></li>
+<li><p>define pipelines;</p></li>
+<li><p>registra experimentos;</p></li>
+<li><p>documenta el proceso.</p></li>
+</ul>
+<p>Resultado:</p>
+<ul class="simple">
+<li><p>cualquier persona puede replicar el flujo;</p></li>
+<li><p>los resultados son auditables;</p></li>
+<li><p>el sistema puede escalar.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="conexion-con-este-modulo">
+<h2>🔗 Conexión con este módulo<a class="headerlink" href="#conexion-con-este-modulo" title="Link to this heading">#</a></h2>
+<p>En este módulo aprenderás a implementar este flujo usando:</p>
+<ul class="simple">
+<li><p>Git → control de versiones</p></li>
+<li><p>Poetry → entornos reproducibles</p></li>
+<li><p>DVC → datos y pipelines</p></li>
+<li><p>MLflow → experimentos</p></li>
+</ul>
+<p>Pero más importante aún:</p>
+<blockquote>
+<div><p>💡 aprenderás a integrarlos en un sistema coherente.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="lo-que-viene-a-continuacion">
+<h2>🚀 Lo que viene a continuación<a class="headerlink" href="#lo-que-viene-a-continuacion" title="Link to this heading">#</a></h2>
+<p>En la siguiente sección profundizaremos en:</p>
+<p>👉 el <strong>ciclo de vida completo de un modelo de Machine Learning</strong></p>
+<p>y cómo cada etapa se conecta con prácticas de MLOps.</p>
+</section>
+<hr class="docutils" />
+<section id="idea-clave-para-llevar">
+<h2>🎯 Idea clave para llevar<a class="headerlink" href="#idea-clave-para-llevar" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><p>❗ Un modelo no es el final del proceso.
+👉 Es solo una pieza dentro de un sistema mucho más grande.</p>
+</div></blockquote>
+<hr class="docutils" />
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./unidad_1"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../caso_estudio.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">🧩 Caso de Estudio: Predicción del Tiempo de Permanencia de Usuarios</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="02_de_notebook_a_sistema.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">De notebook a sistema</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#que-es-mlops">🔍 ¿Qué es MLOps?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#el-problema-tradicional">⚠️ El problema tradicional</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cuando-intentamos-escalar">🚨 Cuando intentamos escalar</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#el-cambio-de-mentalidad">🧠 El cambio de mentalidad</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flujo-mlops-vision-general">🔄 Flujo MLOps (visión general)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#componentes-clave-de-mlops">🧩 Componentes clave de MLOps</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#versionamiento-de-codigo">🔹 1. Versionamiento de código</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gestion-de-entornos">🔹 2. Gestión de entornos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#versionamiento-de-datos">🔹 3. Versionamiento de datos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tracking-de-experimentos">🔹 4. Tracking de experimentos</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-science-vs-mlops">⚖️ Data Science vs MLOps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ejemplo-conceptual">🧪 Ejemplo conceptual</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enfoque-tradicional">🔴 Enfoque tradicional</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enfoque-mlops">🟢 Enfoque MLOps</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conexion-con-este-modulo">🔗 Conexión con este módulo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lo-que-viene-a-continuacion">🚀 Lo que viene a continuación</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#idea-clave-para-llevar">🎯 Idea clave para llevar</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Maestría en Inteligencia de Negocios
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <div>
+  <p>Curso: MLOps en Python · Módulo 1</p>
+  <p>Maestría en Ciencia de Datos</p>
+</div>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

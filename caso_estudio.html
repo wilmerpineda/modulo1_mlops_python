@@ -1,0 +1,708 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>🧩 Caso de Estudio: Predicción del Tiempo de Permanencia de Usuarios &#8212; MLOps en Python</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'caso_estudio';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="🧭 Unidad 1: Panorama de MLOps" href="unidad_1/01_panorama_mlops.html" />
+    <link rel="prev" title="🎯 Resultados de Aprendizaje del Módulo" href="resultados_aprendizaje.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo_santoto.png" class="logo__image only-light" alt="MLOps en Python - Home"/>
+    <script>document.write(`<img src="_static/logo_santoto.png" class="logo__image only-dark" alt="MLOps en Python - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    📘 Módulo 1: Fundamentos de MLOps y Gestión del Ciclo de Vida
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Resultados de Aprendizaje y Caso de Estudio</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="resultados_aprendizaje.html">🎯 Resultados de Aprendizaje del Módulo</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">🧩 Caso de Estudio: Predicción del Tiempo de Permanencia de Usuarios</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 1. Introducción a MLOps</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="unidad_1/01_panorama_mlops.html">🧭 Unidad 1: Panorama de MLOps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unidad_1/02_de_notebook_a_sistema.html">De notebook a sistema</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 2. Ciclo de vida del modelo</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="unidad_2/03_ciclo_vida_modelo.html">🔄 Unidad 2: Ciclo de Vida de un Modelo de Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unidad_2/04_pipeline_base_regresion.html">Pipeline base de regresión</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 3. Git y GitHub</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="unidad_3/05_git_fundamentos.html">🔧 Unidad 3: Fundamentos de Git y GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unidad_3/06_git_cheatsheet.html">🧾 Unidad 3: Git Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unidad_3/07_git_github_flujo_equipo.html">Git y GitHub: flujo de trabajo en equipo</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 4. Gestión de entornos con Poetry</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="unidad_4/08_poetry_fundamentos.html">📦 Unidad 4: Fundamentos de gestión de entornos con Poetry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unidad_4/09_poetry_cheatsheet.html">🧾 Unidad 4: Poetry Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unidad_4/10_entornos_reproducibles.html">🔁 Unidad 4: Entornos reproducibles en proyectos de Machine Learning</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 5. Reproducibilidad con DVC</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="unidad_5/11_dvc_fundamentos.html">📦 Unidad 5: Fundamentos de versionamiento de datos con DVC</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/caso_estudio.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>🧩 Caso de Estudio: Predicción del Tiempo de Permanencia de Usuarios</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contexto-empresarial">🌐 Contexto empresarial</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problema-a-resolver">🚨 Problema a resolver</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objetivo-del-modelo">🎯 Objetivo del modelo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-del-problema-vision-conceptual">📊 Variables del problema (visión conceptual)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-del-usuario">🔹 Variables del usuario</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-contextuales">🔹 Variables contextuales</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-de-interaccion">🔹 Variables de interacción</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-objetivo">🔹 Variable objetivo</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#desafios-del-problema">⚠️ Desafíos del problema</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variabilidad-del-comportamiento">1. Variabilidad del comportamiento</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sesgos-en-los-datos">2. Sesgos en los datos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#datos-dinamicos">3. Datos dinámicos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reproducibilidad">4. Reproducibilidad</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#escalabilidad">5. Escalabilidad</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mas-alla-del-modelo">🧠 Más allá del modelo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conexion-con-mlops">🔄 Conexión con MLOps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#enfoque-del-modulo">🧪 Enfoque del módulo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#idea-clave">🎯 Idea clave</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lo-que-sigue">🚀 Lo que sigue</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="caso-de-estudio-prediccion-del-tiempo-de-permanencia-de-usuarios">
+<h1>🧩 Caso de Estudio: Predicción del Tiempo de Permanencia de Usuarios<a class="headerlink" href="#caso-de-estudio-prediccion-del-tiempo-de-permanencia-de-usuarios" title="Link to this heading">#</a></h1>
+<section id="contexto-empresarial">
+<h2>🌐 Contexto empresarial<a class="headerlink" href="#contexto-empresarial" title="Link to this heading">#</a></h2>
+<p>Una plataforma digital de comercio electrónico y contenido busca mejorar la experiencia de sus usuarios a través de estrategias de personalización y optimización del engagement.</p>
+<p>Uno de los indicadores clave para el negocio es el <strong>tiempo de permanencia en la aplicación</strong> (<em>session duration</em>), ya que está directamente relacionado con:</p>
+<ul class="simple">
+<li><p>la probabilidad de conversión,</p></li>
+<li><p>la exposición a contenido relevante,</p></li>
+<li><p>la interacción con productos y servicios,</p></li>
+<li><p>y el valor generado por usuario.</p></li>
+</ul>
+<p>Actualmente, la compañía cuenta con grandes volúmenes de datos históricos sobre el comportamiento de los usuarios, pero enfrenta dificultades para transformar esa información en decisiones operativas consistentes.</p>
+</section>
+<hr class="docutils" />
+<section id="problema-a-resolver">
+<h2>🚨 Problema a resolver<a class="headerlink" href="#problema-a-resolver" title="Link to this heading">#</a></h2>
+<p>El equipo de analítica ha sido encargado de responder la siguiente pregunta:</p>
+<blockquote>
+<div><p>❓ ¿Podemos predecir cuánto tiempo permanecerá un usuario en la plataforma durante una sesión?</p>
+</div></blockquote>
+<p>Responder esta pregunta permitiría:</p>
+<ul class="simple">
+<li><p>priorizar contenidos en tiempo real;</p></li>
+<li><p>ajustar estrategias de recomendación;</p></li>
+<li><p>optimizar campañas de engagement;</p></li>
+<li><p>y mejorar la asignación de recursos en la plataforma.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="objetivo-del-modelo">
+<h2>🎯 Objetivo del modelo<a class="headerlink" href="#objetivo-del-modelo" title="Link to this heading">#</a></h2>
+<p>Construir un modelo de <strong>regresión</strong> que permita estimar:</p>
+<blockquote>
+<div><p>⏱️ <code class="docutils literal notranslate"><span class="pre">session_minutes</span></code>: tiempo de permanencia (en minutos) de un usuario en una sesión.</p>
+</div></blockquote>
+<p>A partir de variables como:</p>
+<ul class="simple">
+<li><p>características del usuario;</p></li>
+<li><p>comportamiento histórico;</p></li>
+<li><p>contexto temporal;</p></li>
+<li><p>tipo de acceso a la plataforma.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="variables-del-problema-vision-conceptual">
+<h2>📊 Variables del problema (visión conceptual)<a class="headerlink" href="#variables-del-problema-vision-conceptual" title="Link to this heading">#</a></h2>
+<p>A continuación se presentan ejemplos de variables que podrían estar disponibles:</p>
+<section id="variables-del-usuario">
+<h3>🔹 Variables del usuario<a class="headerlink" href="#variables-del-usuario" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">segment</span></code>: tipo de usuario (nuevo, activo, en riesgo, churn)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">historical_avg_session_minutes</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">historical_sessions_last_7d</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">days_since_last_session</span></code></p></li>
+</ul>
+</section>
+<section id="variables-contextuales">
+<h3>🔹 Variables contextuales<a class="headerlink" href="#variables-contextuales" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hour_of_day</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">day_of_week</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">device_os</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">site</span></code></p></li>
+</ul>
+</section>
+<section id="variables-de-interaccion">
+<h3>🔹 Variables de interacción<a class="headerlink" href="#variables-de-interaccion" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">entry_point</span></code> (home, búsqueda, recomendación, notificación)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">push_received_last_24h</span></code></p></li>
+</ul>
+</section>
+<section id="variable-objetivo">
+<h3>🔹 Variable objetivo<a class="headerlink" href="#variable-objetivo" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">session_minutes</span></code></p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="desafios-del-problema">
+<h2>⚠️ Desafíos del problema<a class="headerlink" href="#desafios-del-problema" title="Link to this heading">#</a></h2>
+<p>Aunque el problema parece directo, en la práctica presenta múltiples retos:</p>
+<section id="variabilidad-del-comportamiento">
+<h3>1. Variabilidad del comportamiento<a class="headerlink" href="#variabilidad-del-comportamiento" title="Link to this heading">#</a></h3>
+<p>El tiempo de sesión puede variar significativamente entre usuarios y momentos del día.</p>
+</section>
+<section id="sesgos-en-los-datos">
+<h3>2. Sesgos en los datos<a class="headerlink" href="#sesgos-en-los-datos" title="Link to this heading">#</a></h3>
+<p>Usuarios más activos generan más datos, lo que puede sesgar el modelo.</p>
+</section>
+<section id="datos-dinamicos">
+<h3>3. Datos dinámicos<a class="headerlink" href="#datos-dinamicos" title="Link to this heading">#</a></h3>
+<p>El comportamiento del usuario cambia con el tiempo (concept drift).</p>
+</section>
+<section id="reproducibilidad">
+<h3>4. Reproducibilidad<a class="headerlink" href="#reproducibilidad" title="Link to this heading">#</a></h3>
+<p>Diferentes versiones del dataset pueden producir resultados distintos.</p>
+</section>
+<section id="escalabilidad">
+<h3>5. Escalabilidad<a class="headerlink" href="#escalabilidad" title="Link to this heading">#</a></h3>
+<p>El modelo debe integrarse en un entorno donde múltiples equipos trabajan simultáneamente.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="mas-alla-del-modelo">
+<h2>🧠 Más allá del modelo<a class="headerlink" href="#mas-alla-del-modelo" title="Link to this heading">#</a></h2>
+<p>Un error común es pensar que el objetivo es simplemente entrenar un modelo que prediga <code class="docutils literal notranslate"><span class="pre">session_minutes</span></code>.</p>
+<p>Sin embargo, en un entorno real, el desafío es mucho más amplio:</p>
+<blockquote>
+<div><p>❗ No se trata solo de construir un modelo, sino de construir un sistema que lo haga confiable, reproducible y útil en producción.</p>
+</div></blockquote>
+<p>Esto implica responder preguntas como:</p>
+<ul class="simple">
+<li><p>¿Qué versión de los datos se utilizó?</p></li>
+<li><p>¿Qué parámetros se emplearon?</p></li>
+<li><p>¿Cómo se comparan diferentes modelos?</p></li>
+<li><p>¿Cómo se garantiza que otro equipo pueda replicar los resultados?</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="conexion-con-mlops">
+<h2>🔄 Conexión con MLOps<a class="headerlink" href="#conexion-con-mlops" title="Link to this heading">#</a></h2>
+<p>Este caso de estudio será el hilo conductor del módulo y permitirá introducir progresivamente los componentes de MLOps:</p>
+<ul class="simple">
+<li><p><strong>Git / GitHub</strong> → colaboración y versionamiento de código</p></li>
+<li><p><strong>Poetry</strong> → gestión de entornos reproducibles</p></li>
+<li><p><strong>DVC</strong> → versionamiento de datos y pipelines</p></li>
+<li><p><strong>MLflow</strong> → seguimiento de experimentos</p></li>
+</ul>
+<p>A lo largo del módulo, este problema evolucionará desde:</p>
+<p>👉 un notebook exploratorio
+hasta
+👉 un sistema estructurado y reproducible</p>
+</section>
+<hr class="docutils" />
+<section id="enfoque-del-modulo">
+<h2>🧪 Enfoque del módulo<a class="headerlink" href="#enfoque-del-modulo" title="Link to this heading">#</a></h2>
+<p>Durante el desarrollo del curso:</p>
+<ol class="arabic simple">
+<li><p>Se construirá un dataset simulado basado en este contexto.</p></li>
+<li><p>Se desarrollará un modelo base de regresión.</p></li>
+<li><p>Se estructurará el proyecto siguiendo buenas prácticas.</p></li>
+<li><p>Se integrarán herramientas de MLOps.</p></li>
+<li><p>Se evaluará el sistema completo desde una perspectiva aplicada.</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="idea-clave">
+<h2>🎯 Idea clave<a class="headerlink" href="#idea-clave" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><p>💡 El valor no está solo en predecir el tiempo de sesión,
+sino en construir un sistema que permita hacerlo de forma consistente, reproducible y escalable.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="lo-que-sigue">
+<h2>🚀 Lo que sigue<a class="headerlink" href="#lo-que-sigue" title="Link to this heading">#</a></h2>
+<p>En la siguiente sección comenzaremos a analizar:</p>
+<p>👉 cómo un flujo típico basado en notebooks evoluciona hacia un sistema estructurado</p>
+<p>y por qué este cambio es fundamental en entornos reales.</p>
+<hr class="docutils" />
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="resultados_aprendizaje.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">🎯 Resultados de Aprendizaje del Módulo</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="unidad_1/01_panorama_mlops.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">🧭 Unidad 1: Panorama de MLOps</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contexto-empresarial">🌐 Contexto empresarial</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problema-a-resolver">🚨 Problema a resolver</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objetivo-del-modelo">🎯 Objetivo del modelo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-del-problema-vision-conceptual">📊 Variables del problema (visión conceptual)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-del-usuario">🔹 Variables del usuario</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-contextuales">🔹 Variables contextuales</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-de-interaccion">🔹 Variables de interacción</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-objetivo">🔹 Variable objetivo</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#desafios-del-problema">⚠️ Desafíos del problema</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variabilidad-del-comportamiento">1. Variabilidad del comportamiento</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sesgos-en-los-datos">2. Sesgos en los datos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#datos-dinamicos">3. Datos dinámicos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reproducibilidad">4. Reproducibilidad</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#escalabilidad">5. Escalabilidad</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mas-alla-del-modelo">🧠 Más allá del modelo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conexion-con-mlops">🔄 Conexión con MLOps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#enfoque-del-modulo">🧪 Enfoque del módulo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#idea-clave">🎯 Idea clave</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lo-que-sigue">🚀 Lo que sigue</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Maestría en Inteligencia de Negocios
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <div>
+  <p>Curso: MLOps en Python · Módulo 1</p>
+  <p>Maestría en Ciencia de Datos</p>
+</div>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
