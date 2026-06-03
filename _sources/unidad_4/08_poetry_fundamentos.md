@@ -2,15 +2,13 @@
 
 ## 🌍 El problema de los entornos en Machine Learning
 
-En proyectos de Machine Learning, no solo importa el código.
-
-También importan:
+En proyectos de Machine Learning, no solo importa el código. También importan las condiciones bajo las cuales ese código se ejecuta, porque pequeñas diferencias en librerías o versiones pueden cambiar resultados, generar errores o impedir que otra persona reproduzca el experimento:
 
 - las versiones de librerías;
 - las dependencias instaladas;
 - la configuración del entorno.
 
-Un mismo código puede comportarse de manera diferente dependiendo del entorno donde se ejecute.
+Un mismo código puede comportarse de manera diferente dependiendo del entorno donde se ejecute. Por eso la gestión del entorno debe tratarse como parte del proyecto, no como una configuración informal de cada computador.
 
 ---
 
@@ -31,7 +29,7 @@ Esto ocurre porque:
 
 ## 🧠 ¿Qué es un entorno?
 
-Un entorno es el conjunto de:
+Un entorno es el conjunto de componentes que hacen posible ejecutar el proyecto de forma consistente:
 
 - versión de Python;
 - librerías instaladas;
@@ -41,7 +39,7 @@ Un entorno es el conjunto de:
 
 ## 🔄 ¿Por qué es un problema en MLOps?
 
-En MLOps necesitamos:
+En MLOps necesitamos controlar el entorno porque los experimentos, pipelines y despliegues deben poder repetirse en distintos contextos:
 
 - reproducibilidad;
 - consistencia;
@@ -60,9 +58,9 @@ Sin control de entornos:
 
 ### 📄 `requirements.txt`
 
-Lista de dependencias:
+Un archivo `requirements.txt` lista dependencias de forma sencilla:
 
-```txt
+```text
 pandas==2.0.0
 scikit-learn==1.3.0
 numpy==1.24.0
@@ -77,7 +75,7 @@ numpy==1.24.0
 
 ### 🐍 Conda
 
-Permite crear entornos virtuales.
+Conda permite crear entornos virtuales y manejar paquetes de distintos ecosistemas. Es una alternativa muy usada en ciencia de datos, aunque en este módulo nos enfocamos en Poetry por su integración con `pyproject.toml` y su manejo explícito de lock files.
 
 👉 Problemas:
 - más pesado;
@@ -88,7 +86,7 @@ Permite crear entornos virtuales.
 
 ## 🚀 ¿Qué es Poetry?
 
-Poetry es una herramienta moderna para:
+Poetry es una herramienta moderna para gestionar proyectos Python de forma reproducible. Su valor no está solo en instalar librerías, sino en mantener una definición clara del proyecto y un archivo de bloqueo con versiones resueltas:
 
 - gestión de dependencias;
 - control de entornos virtuales;
@@ -98,7 +96,7 @@ Poetry es una herramienta moderna para:
 
 ## 🎯 ¿Qué resuelve Poetry?
 
-Poetry permite:
+Poetry permite convertir la instalación del entorno en un proceso documentado y repetible:
 
 - definir dependencias de forma clara;
 - asegurar versiones consistentes;
@@ -111,9 +109,7 @@ Poetry permite:
 
 ### 📄 `pyproject.toml`
 
-Archivo principal del proyecto.
-
-Define:
+`pyproject.toml` es el archivo principal del proyecto. Define:
 
 - nombre del proyecto;
 - versión;
@@ -124,9 +120,7 @@ Define:
 
 ### 🔒 `poetry.lock`
 
-Archivo generado automáticamente.
-
-Contiene:
+`poetry.lock` es un archivo generado automáticamente después de resolver dependencias. Contiene:
 
 - versiones exactas de dependencias;
 - dependencias indirectas;
@@ -195,6 +189,14 @@ En el proyecto del módulo:
 
 > 💡 No basta con versionar código.  
 > También debemos versionar el entorno en el que ese código se ejecuta.
+
+---
+
+## 📚 Lecturas recomendadas
+
+* [Poetry documentation](https://python-poetry.org/docs/)
+* [Poetry documentation - Managing dependencies](https://python-poetry.org/docs/managing-dependencies/)
+* [Python Packaging User Guide - pyproject.toml](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/)
 
 ---
 

@@ -57,11 +57,446 @@
     <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = `pre.mermaid {
+    /* Same as .mermaid-container > pre */
+    display: block;
+    width: 100%;
+}
+
+pre.mermaid > svg {
+    /* Same as .mermaid-container > pre > svg */
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}`;
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = `.mermaid-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.mermaid-container > pre {
+    display: block;
+    width: 100%;
+}
+
+.mermaid-container > pre > svg {
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}
+
+.mermaid-fullscreen-btn {
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+    color: #333;
+}
+
+.mermaid-fullscreen-btn:hover {
+    opacity: 100% !important;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-btn.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-btn.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal {
+    display: none;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 95vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 9999;
+    padding: 20px;
+    overflow: auto;
+}
+
+.mermaid-fullscreen-modal.dark-theme {
+    background: rgba(0, 0, 0, 0.98);
+}
+
+.mermaid-fullscreen-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen {
+    position: relative;
+    width: 95vw;
+    height: 90vh;
+    max-width: 95vw;
+    max-height: 90vh;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen.dark-theme {
+    background: #1a1a1a;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.mermaid-container-fullscreen pre.mermaid {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen .mermaid svg {
+    height: 100% !important;
+    width: 100% !important;
+    cursor: grab;
+}
+
+.mermaid-fullscreen-close {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s;
+    font-size: 24px;
+    line-height: 1;
+    color: #333;
+}
+
+.mermaid-fullscreen-close:hover {
+    background: white;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-close.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-close.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
+    display: none !important;
+}`;
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        all_mermaids.forEach((el) => {
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+        await mermaid.run();
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+
+    if ("False" === "True") {
+        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("");
+            if(all_mermaids.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            } else if(svgs.size() !== mermaids_to_add_zoom) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            } else {
+                svgs.each(function() {
+                    var svg = d3.select(this);
+                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+                    var inner = svg.select("g");
+                    var zoom = d3.zoom().on("zoom", function(event) {
+                        inner.attr("transform", event.transform);
+                    });
+                    svg.call(zoom);
+                });
+            }
+        }
+    } else if(all_mermaids.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if ("True" !== "True") return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    const closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = '⛶';
+        fullscreenBtn.style.opacity = '50%';
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scroll, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.sdisplay = 'block';
+
+                if ("False" === "True") {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+const load = async () => {
+    initStyles();
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...JSON.parse(
+                    `{"startOnLoad": false}`
+                ),
+                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...JSON.parse(
+        `{"startOnLoad": false}`
+    ),
+    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    }
+);
+
+window.addEventListener("load", load);</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'unidad_2/03_ciclo_vida_modelo';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Pipeline base de regresión" href="04_pipeline_base_regresion.html" />
-    <link rel="prev" title="De notebook a sistema" href="../unidad_1/02_de_notebook_a_sistema.html" />
+    <link rel="next" title="🧪 Unidad 2: Pipeline base de regresión" href="04_pipeline_base_regresion.html" />
+    <link rel="prev" title="🧪 Unidad 1: De notebook a sistema" href="../unidad_1/02_de_notebook_a_sistema.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -187,18 +622,18 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 1. Introducción a MLOps</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../unidad_1/01_panorama_mlops.html">🧭 Unidad 1: Panorama de MLOps</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../unidad_1/02_de_notebook_a_sistema.html">De notebook a sistema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_1/02_de_notebook_a_sistema.html">🧪 Unidad 1: De notebook a sistema</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 2. Ciclo de vida del modelo</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">🔄 Unidad 2: Ciclo de Vida de un Modelo de Machine Learning</a></li>
-<li class="toctree-l1"><a class="reference internal" href="04_pipeline_base_regresion.html">Pipeline base de regresión</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_pipeline_base_regresion.html">🧪 Unidad 2: Pipeline base de regresión</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 3. Git y GitHub</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../unidad_3/05_git_fundamentos.html">🔧 Unidad 3: Fundamentos de Git y GitHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../unidad_3/06_git_cheatsheet.html">🧾 Unidad 3: Git Cheat Sheet</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../unidad_3/07_git_github_flujo_equipo.html">Git y GitHub: flujo de trabajo en equipo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_3/07_git_github_flujo_equipo.html">🤝 Unidad 3: Git y GitHub: flujo de trabajo en equipo</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 4. Gestión de entornos con Poetry</span></p>
 <ul class="nav bd-sidenav">
@@ -209,6 +644,20 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 5. Reproducibilidad con DVC</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../unidad_5/11_dvc_fundamentos.html">📦 Unidad 5: Fundamentos de versionamiento de datos con DVC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_5/12_dvc_cheatsheet.html">🧾 Unidad 5: DVC Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_5/13_pipeline_dvc.html">🔁 Unidad 5: Pipeline de regresión con DVC</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 6. Tracking de experimentos con MLflow</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_6/14_mlflow_fundamentos.html">📊 Unidad 6: Fundamentos de tracking de experimentos con MLflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_6/15_mlflow_cheatsheet.html">🧾 Unidad 6: MLflow Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_6/16_reproducibilidad_auditoria.html">🔍 Unidad 6: Reproducibilidad y auditoría del proceso experimental</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 7. Integración del flujo MLOps</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_7/17_estructura_proyecto_ml.html">🗂️ Unidad 7: Estructuración profesional de proyectos de Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_7/18_ecosistema_herramientas.html">🧰 Unidad 7: Ecosistema de herramientas MLOps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_7/19_checklist_modulo.html">✅ Unidad 7: Checklist integrador del módulo</a></li>
 </ul>
 
     </div>
@@ -403,6 +852,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conexion-con-mlops">🧠 Conexión con MLOps</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#aplicacion-al-caso-de-estudio">🧪 Aplicación al caso de estudio</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#idea-clave">🎯 Idea clave</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecturas-recomendadas">📚 Lecturas recomendadas</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lo-que-sigue">🚀 Lo que sigue</a></li>
 </ul>
             </nav>
@@ -419,8 +869,7 @@ document.write(`
 <h1>🔄 Unidad 2: Ciclo de Vida de un Modelo de Machine Learning<a class="headerlink" href="#unidad-2-ciclo-de-vida-de-un-modelo-de-machine-learning" title="Link to this heading">#</a></h1>
 <section id="mas-alla-del-entrenamiento">
 <h2>🌍 Más allá del entrenamiento<a class="headerlink" href="#mas-alla-del-entrenamiento" title="Link to this heading">#</a></h2>
-<p>En muchos contextos académicos, el desarrollo de un modelo de Machine Learning se presenta como un proceso que termina cuando se obtienen buenas métricas.</p>
-<p>Sin embargo, en entornos reales, esta visión es incompleta.</p>
+<p>En muchos contextos académicos, el desarrollo de un modelo de Machine Learning se presenta como un proceso que termina cuando se obtienen buenas métricas. Sin embargo, en entornos reales esta visión es incompleta, porque un modelo útil debe seguir funcionando cuando cambian los datos, el negocio, los usuarios y las condiciones técnicas del sistema.</p>
 <blockquote>
 <div><p>❗ Un modelo no termina cuando se entrena.
 👉 En realidad, ahí es donde comienza su ciclo de vida.</p>
@@ -429,7 +878,7 @@ document.write(`
 <hr class="docutils" />
 <section id="que-es-el-ciclo-de-vida-de-un-modelo">
 <h2>🧠 ¿Qué es el ciclo de vida de un modelo?<a class="headerlink" href="#que-es-el-ciclo-de-vida-de-un-modelo" title="Link to this heading">#</a></h2>
-<p>El ciclo de vida de un modelo de Machine Learning describe todas las etapas necesarias para:</p>
+<p>El ciclo de vida de un modelo de Machine Learning describe todas las etapas necesarias para convertir una idea analítica en un componente operativo:</p>
 <ul class="simple">
 <li><p>construir,</p></li>
 <li><p>validar,</p></li>
@@ -437,12 +886,13 @@ document.write(`
 <li><p>monitorear,</p></li>
 <li><p>y mantener un modelo en producción.</p></li>
 </ul>
-<p>Este proceso no es lineal, sino <strong>iterativo</strong>.</p>
+<p>Este proceso no es lineal, sino <strong>iterativo</strong>. Cada etapa puede revelar problemas que obligan a regresar a una fase anterior, ajustar datos, redefinir métricas o replantear el objetivo del modelo.</p>
 </section>
 <hr class="docutils" />
 <section id="flujo-general-del-ciclo-de-vida">
 <h2>🔄 Flujo general del ciclo de vida<a class="headerlink" href="#flujo-general-del-ciclo-de-vida" title="Link to this heading">#</a></h2>
-<div class="highlight-mermaid notranslate"><div class="highlight"><pre><span></span>flowchart LR
+<pre  class="mermaid">
+        flowchart LR
     A[Definición del problema] --&gt; B[Recolección de datos]
     B --&gt; C[Preprocesamiento]
     C --&gt; D[Entrenamiento]
@@ -451,9 +901,7 @@ document.write(`
     F --&gt; G[Monitoreo]
     G --&gt; H[Retraining]
     H --&gt; B
-</pre></div>
-</div>
-<p>Este flujo muestra que:</p>
+    </pre><p>Este flujo muestra que el modelo evoluciona dentro de un sistema dinámico:</p>
 <ul class="simple">
 <li><p>el modelo evoluciona con el tiempo;</p></li>
 <li><p>los datos cambian;</p></li>
@@ -463,7 +911,7 @@ document.write(`
 <hr class="docutils" />
 <section id="etapas-del-ciclo-de-vida">
 <h2>🧩 Etapas del ciclo de vida<a class="headerlink" href="#etapas-del-ciclo-de-vida" title="Link to this heading">#</a></h2>
-<p>A continuación, se describen las principales etapas del ciclo de vida, utilizando como referencia el caso de estudio de <strong>predicción del tiempo de permanencia (<code class="docutils literal notranslate"><span class="pre">session_minutes</span></code>)</strong>.</p>
+<p>A continuación, se describen las principales etapas del ciclo de vida, utilizando como referencia el caso de estudio de <strong>predicción del tiempo de permanencia (<code class="docutils literal notranslate"><span class="pre">session_minutes</span></code>)</strong>. La intención es que cada etapa se entienda como una decisión técnica y de negocio, no como una lista mecánica de pasos.</p>
 </section>
 <hr class="docutils" />
 <section id="definicion-del-problema">
@@ -473,6 +921,7 @@ document.write(`
 <blockquote>
 <div><p>¿Podemos predecir cuánto tiempo permanecerá un usuario en la plataforma?</p>
 </div></blockquote>
+<p>Esta pregunta define el alcance del proyecto y condiciona todas las decisiones posteriores. Si la pregunta está mal formulada, el modelo puede optimizar una métrica interesante desde el punto de vista técnico pero poco útil para la operación del negocio.</p>
 </section>
 <section id="implicaciones">
 <h3>🔍 Implicaciones<a class="headerlink" href="#implicaciones" title="Link to this heading">#</a></h3>
@@ -501,6 +950,7 @@ document.write(`
 <li><p>datos de usuario;</p></li>
 <li><p>eventos de interacción.</p></li>
 </ul>
+<p>La calidad de estas fuentes determina la calidad del modelo. En MLOps no basta con acceder a los datos; también se debe conocer su origen, frecuencia de actualización, responsables y posibles cambios a lo largo del tiempo.</p>
 </section>
 <section id="retos">
 <h3>⚠️ Retos<a class="headerlink" href="#retos" title="Link to this heading">#</a></h3>
@@ -522,6 +972,7 @@ document.write(`
 <li><p>transformación de variables;</p></li>
 <li><p>encoding de variables categóricas.</p></li>
 </ul>
+<p>El preprocesamiento debe quedar expresado como código reproducible. Si una transformación se hace manualmente o queda oculta en una celda aislada, el pipeline pierde trazabilidad y se vuelve difícil explicar cómo se produjo el dataset final.</p>
 </section>
 <section id="en-el-notebook-anterior">
 <h3>💡 En el notebook anterior<a class="headerlink" href="#en-el-notebook-anterior" title="Link to this heading">#</a></h3>
@@ -541,6 +992,7 @@ document.write(`
 <li><p>modelo de regresión lineal;</p></li>
 <li><p>posible extensión a modelos más complejos.</p></li>
 </ul>
+<p>El entrenamiento no consiste únicamente en llamar a un algoritmo. También implica controlar parámetros, fijar semillas cuando corresponda, separar datos de entrenamiento y prueba, y conservar evidencia de la configuración utilizada.</p>
 </section>
 <section id="consideraciones">
 <h3>⚠️ Consideraciones<a class="headerlink" href="#consideraciones" title="Link to this heading">#</a></h3>
@@ -620,14 +1072,13 @@ document.write(`
 <section id="naturaleza-iterativa">
 <h2>🔁 Naturaleza iterativa<a class="headerlink" href="#naturaleza-iterativa" title="Link to this heading">#</a></h2>
 <p>El ciclo de vida no termina nunca:</p>
-<div class="highlight-mermaid notranslate"><div class="highlight"><pre><span></span>flowchart LR
+<pre  class="mermaid">
+        flowchart LR
     A[Modelo en producción] --&gt; B[Nuevos datos]
     B --&gt; C[Reentrenamiento]
     C --&gt; D[Nuevo modelo]
     D --&gt; A
-</pre></div>
-</div>
-</section>
+    </pre></section>
 <hr class="docutils" />
 <section id="enfoque-tradicional-vs-enfoque-mlops">
 <h2>⚖️ Enfoque tradicional vs enfoque MLOps<a class="headerlink" href="#enfoque-tradicional-vs-enfoque-mlops" title="Link to this heading">#</a></h2>
@@ -715,12 +1166,20 @@ es un sistema vivo que evoluciona con los datos.</p>
 </div></blockquote>
 </section>
 <hr class="docutils" />
+<section id="lecturas-recomendadas">
+<h2>📚 Lecturas recomendadas<a class="headerlink" href="#lecturas-recomendadas" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning">Google Cloud - MLOps: continuous delivery and automation pipelines in machine learning</a></p></li>
+<li><p><a class="reference external" href="https://cloud.google.com/resources/mlops-whitepaper">Google Cloud - Practitioner’s guide to MLOps</a></p></li>
+<li><p><a class="reference external" href="https://www.mlflow.org/docs/latest/ml/tracking">MLflow documentation - Tracking</a></p></li>
+</ul>
+</section>
+<hr class="docutils" />
 <section id="lo-que-sigue">
 <h2>🚀 Lo que sigue<a class="headerlink" href="#lo-que-sigue" title="Link to this heading">#</a></h2>
 <p>En la siguiente unidad comenzaremos a construir:</p>
 <p>👉 un pipeline estructurado para este problema</p>
 <p>y veremos cómo pasar de código experimental a código reutilizable.</p>
-<hr class="docutils" />
 </section>
 </section>
 
@@ -760,7 +1219,7 @@ es un sistema vivo que evoluciona con los datos.</p>
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">De notebook a sistema</p>
+        <p class="prev-next-title">🧪 Unidad 1: De notebook a sistema</p>
       </div>
     </a>
     <a class="right-next"
@@ -768,7 +1227,7 @@ es un sistema vivo que evoluciona con los datos.</p>
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Pipeline base de regresión</p>
+        <p class="prev-next-title">🧪 Unidad 2: Pipeline base de regresión</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -834,6 +1293,7 @@ es un sistema vivo que evoluciona con los datos.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conexion-con-mlops">🧠 Conexión con MLOps</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#aplicacion-al-caso-de-estudio">🧪 Aplicación al caso de estudio</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#idea-clave">🎯 Idea clave</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecturas-recomendadas">📚 Lecturas recomendadas</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lo-que-sigue">🚀 Lo que sigue</a></li>
 </ul>
   </nav></div>

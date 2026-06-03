@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>🧭 Unidad 1: Panorama de MLOps &#8212; MLOps en Python</title>
+    <title>📊 Unidad 6: Fundamentos de tracking de experimentos con MLflow &#8212; MLOps en Python</title>
   
   
   
@@ -492,11 +492,11 @@ mermaid.initialize(
 );
 
 window.addEventListener("load", load);</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'unidad_1/01_panorama_mlops';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'unidad_6/14_mlflow_fundamentos';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="🧪 Unidad 1: De notebook a sistema" href="02_de_notebook_a_sistema.html" />
-    <link rel="prev" title="🧩 Caso de Estudio: Predicción del Tiempo de Permanencia de Usuarios" href="../caso_estudio.html" />
+    <link rel="next" title="🧾 Unidad 6: MLflow Cheat Sheet" href="15_mlflow_cheatsheet.html" />
+    <link rel="prev" title="🔁 Unidad 5: Pipeline de regresión con DVC" href="../unidad_5/13_pipeline_dvc.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -620,9 +620,9 @@ window.addEventListener("load", load);</script>
 <li class="toctree-l1"><a class="reference internal" href="../caso_estudio.html">🧩 Caso de Estudio: Predicción del Tiempo de Permanencia de Usuarios</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 1. Introducción a MLOps</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">🧭 Unidad 1: Panorama de MLOps</a></li>
-<li class="toctree-l1"><a class="reference internal" href="02_de_notebook_a_sistema.html">🧪 Unidad 1: De notebook a sistema</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_1/01_panorama_mlops.html">🧭 Unidad 1: Panorama de MLOps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_1/02_de_notebook_a_sistema.html">🧪 Unidad 1: De notebook a sistema</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 2. Ciclo de vida del modelo</span></p>
 <ul class="nav bd-sidenav">
@@ -648,10 +648,10 @@ window.addEventListener("load", load);</script>
 <li class="toctree-l1"><a class="reference internal" href="../unidad_5/13_pipeline_dvc.html">🔁 Unidad 5: Pipeline de regresión con DVC</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 6. Tracking de experimentos con MLflow</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../unidad_6/14_mlflow_fundamentos.html">📊 Unidad 6: Fundamentos de tracking de experimentos con MLflow</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../unidad_6/15_mlflow_cheatsheet.html">🧾 Unidad 6: MLflow Cheat Sheet</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../unidad_6/16_reproducibilidad_auditoria.html">🔍 Unidad 6: Reproducibilidad y auditoría del proceso experimental</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">📊 Unidad 6: Fundamentos de tracking de experimentos con MLflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="15_mlflow_cheatsheet.html">🧾 Unidad 6: MLflow Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="16_reproducibilidad_auditoria.html">🔍 Unidad 6: Reproducibilidad y auditoría del proceso experimental</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 7. Integración del flujo MLOps</span></p>
 <ul class="nav bd-sidenav">
@@ -712,7 +712,7 @@ window.addEventListener("load", load);</script>
       
       
       
-      <li><a href="../_sources/unidad_1/01_panorama_mlops.md" target="_blank"
+      <li><a href="../_sources/unidad_6/14_mlflow_fundamentos.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -796,7 +796,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>🧭 Unidad 1: Panorama de MLOps</h1>
+    <h1>📊 Unidad 6: Fundamentos de tracking de experimentos con MLflow</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -806,35 +806,23 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#que-es-mlops">🔍 ¿Qué es MLOps?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#el-problema-tradicional">⚠️ El problema tradicional</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#que-cambia-al-pasar-de-data-science-a-mlops">🧱 ¿Qué cambia al pasar de Data Science a MLOps?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cuando-intentamos-escalar">🚨 Cuando intentamos escalar</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#el-cambio-de-mentalidad">🧠 El cambio de mentalidad</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flujo-mlops-vision-general">🔄 Flujo MLOps (visión general)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#componentes-clave-de-mlops">🧩 Componentes clave de MLOps</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#versionamiento-de-codigo">🔹 1. Versionamiento de código</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gestion-de-entornos">🔹 2. Gestión de entornos</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#versionamiento-de-datos">🔹 3. Versionamiento de datos</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tracking-de-experimentos">🔹 4. Tracking de experimentos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proposito">🎯 Propósito</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#el-problema-sin-tracking">⚠️ El problema sin tracking</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#que-es-mlflow-tracking">🚀 ¿Qué es MLflow Tracking?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conceptos-clave">🧩 Conceptos clave</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#experimento">Experimento</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run">Run</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parametros">Parámetros</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas">Métricas</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#artefactos">Artefactos</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#retos-frecuentes-en-proyectos-reales">🚧 Retos frecuentes en proyectos reales</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reproducibilidad">Reproducibilidad</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#escalabilidad">Escalabilidad</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mantenimiento">Mantenimiento</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ecosistema-de-herramientas">🧰 Ecosistema de herramientas</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-science-vs-mlops">⚖️ Data Science vs MLOps</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ejemplo-conceptual">🧪 Ejemplo conceptual</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enfoque-tradicional">🔴 Enfoque tradicional</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enfoque-mlops">🟢 Enfoque MLOps</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conexion-con-este-modulo">🔗 Conexión con este módulo</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lo-que-viene-a-continuacion">🚀 Lo que viene a continuación</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#idea-clave-para-llevar">🎯 Idea clave para llevar</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flujo-conceptual">🔄 Flujo conceptual</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ejemplo-minimo">🧪 Ejemplo mínimo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interfaz-de-mlflow">🖥️ Interfaz de MLflow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlflow-weights-biases-y-neptune-ai">⚖️ MLflow, Weights &amp; Biases y Neptune.ai</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conexion-con-git-poetry-y-dvc">🔗 Conexión con Git, Poetry y DVC</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#idea-clave">🎯 Idea clave</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecturas-recomendadas">📚 Lecturas recomendadas</a></li>
 </ul>
             </nav>
@@ -847,360 +835,223 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="unidad-1-panorama-de-mlops">
-<h1>🧭 Unidad 1: Panorama de MLOps<a class="headerlink" href="#unidad-1-panorama-de-mlops" title="Link to this heading">#</a></h1>
-<section id="que-es-mlops">
-<h2>🔍 ¿Qué es MLOps?<a class="headerlink" href="#que-es-mlops" title="Link to this heading">#</a></h2>
-<p>MLOps (Machine Learning Operations) es un conjunto de prácticas que busca integrar tres perspectivas que tradicionalmente se trabajan por separado:</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="unidad-6-fundamentos-de-tracking-de-experimentos-con-mlflow">
+<h1>📊 Unidad 6: Fundamentos de tracking de experimentos con MLflow<a class="headerlink" href="#unidad-6-fundamentos-de-tracking-de-experimentos-con-mlflow" title="Link to this heading">#</a></h1>
+<section id="proposito">
+<h2>🎯 Propósito<a class="headerlink" href="#proposito" title="Link to this heading">#</a></h2>
+<p>En las unidades anteriores controlamos tres piezas fundamentales del flujo MLOps:</p>
 <ul class="simple">
-<li><p><strong>Ciencia de datos</strong></p></li>
-<li><p><strong>Ingeniería de software</strong></p></li>
-<li><p><strong>DevOps</strong></p></li>
+<li><p>el código con Git;</p></li>
+<li><p>el entorno con Poetry;</p></li>
+<li><p>los datos y pipelines con DVC.</p></li>
 </ul>
-<p>El objetivo de esa integración es construir sistemas de Machine Learning que no solo produzcan buenas métricas en una etapa experimental, sino que también puedan sostenerse cuando el proyecto crece:</p>
+<p>Ahora necesitamos controlar una cuarta pieza: <strong>los experimentos</strong>. Esta pieza es crítica porque la mayor parte del trabajo de modelado consiste en probar alternativas, comparar resultados y justificar por qué una configuración es mejor que otra para el problema de negocio.</p>
+<p>En Machine Learning, un experimento no es solo ejecutar un modelo. Es una combinación específica de:</p>
 <ul class="simple">
-<li><p>reproducibles,</p></li>
-<li><p>escalables,</p></li>
-<li><p>mantenibles,</p></li>
-<li><p>y colaborativos.</p></li>
+<li><p>versión de datos;</p></li>
+<li><p>versión de código;</p></li>
+<li><p>parámetros;</p></li>
+<li><p>algoritmo;</p></li>
+<li><p>métricas;</p></li>
+<li><p>artefactos generados.</p></li>
 </ul>
 </section>
 <hr class="docutils" />
-<section id="el-problema-tradicional">
-<h2>⚠️ El problema tradicional<a class="headerlink" href="#el-problema-tradicional" title="Link to this heading">#</a></h2>
-<p>En muchos proyectos de ciencia de datos, el flujo típico es el siguiente:</p>
+<section id="el-problema-sin-tracking">
+<h2>⚠️ El problema sin tracking<a class="headerlink" href="#el-problema-sin-tracking" title="Link to this heading">#</a></h2>
+<p>En un flujo manual, es común registrar resultados en hojas de cálculo, archivos sueltos o nombres de carpetas como:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>modelo_final.pkl
+modelo_final_v2.pkl
+modelo_final_ahora_si.pkl
+</pre></div>
+</div>
+<p>Este enfoque falla rápidamente porque:</p>
+<ul class="simple">
+<li><p>no permite comparar experimentos con rigor;</p></li>
+<li><p>se pierden parámetros importantes;</p></li>
+<li><p>no queda claro qué artefacto corresponde a cada resultado;</p></li>
+<li><p>no existe una auditoría confiable del proceso.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="que-es-mlflow-tracking">
+<h2>🚀 ¿Qué es MLflow Tracking?<a class="headerlink" href="#que-es-mlflow-tracking" title="Link to this heading">#</a></h2>
+<p>MLflow Tracking es un componente de MLflow que permite registrar y consultar ejecuciones de experimentos. En lugar de depender de notas manuales, MLflow crea un historial consultable donde cada ejecución queda asociada con sus parámetros, métricas y archivos generados.</p>
+<p>Una ejecución o <strong>run</strong> puede guardar:</p>
+<ul class="simple">
+<li><p>parámetros, por ejemplo <code class="docutils literal notranslate"><span class="pre">alpha</span></code>, <code class="docutils literal notranslate"><span class="pre">max_depth</span></code> o <code class="docutils literal notranslate"><span class="pre">random_state</span></code>;</p></li>
+<li><p>métricas, por ejemplo <code class="docutils literal notranslate"><span class="pre">mae</span></code>, <code class="docutils literal notranslate"><span class="pre">rmse</span></code> o <code class="docutils literal notranslate"><span class="pre">r2</span></code>;</p></li>
+<li><p>artefactos, por ejemplo modelos, gráficos o reportes;</p></li>
+<li><p>etiquetas y metadatos útiles para auditoría.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="conceptos-clave">
+<h2>🧩 Conceptos clave<a class="headerlink" href="#conceptos-clave" title="Link to this heading">#</a></h2>
+<section id="experimento">
+<h3>Experimento<a class="headerlink" href="#experimento" title="Link to this heading">#</a></h3>
+<p>Un experimento es una agrupación lógica de ejecuciones relacionadas. En el caso de este módulo, podemos usar un experimento para reunir todos los modelos que intentan predecir <code class="docutils literal notranslate"><span class="pre">session_minutes</span></code>, aunque cada ejecución use parámetros o algoritmos distintos.</p>
+<p>Ejemplo:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>session_minutes_regression
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="run">
+<h3>Run<a class="headerlink" href="#run" title="Link to this heading">#</a></h3>
+<p>Un <strong>run</strong> es una ejecución concreta del código de entrenamiento. Cada run representa una combinación puntual de datos, código, parámetros y resultados, por lo que funciona como una unidad básica de auditoría.</p>
+<p>Ejemplo:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>LinearRegression con dataset v1 y split 80/20
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="parametros">
+<h3>Parámetros<a class="headerlink" href="#parametros" title="Link to this heading">#</a></h3>
+<p>Los parámetros son valores de configuración elegidos antes o durante el entrenamiento. Registrarlos permite entender qué decisiones produjeron un resultado, especialmente cuando se comparan modelos con distintos algoritmos o hiperparámetros.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mlflow</span><span class="o">.</span><span class="n">log_param</span><span class="p">(</span><span class="s2">&quot;model_type&quot;</span><span class="p">,</span> <span class="s2">&quot;linear_regression&quot;</span><span class="p">)</span>
+<span class="n">mlflow</span><span class="o">.</span><span class="n">log_param</span><span class="p">(</span><span class="s2">&quot;test_size&quot;</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="metricas">
+<h3>Métricas<a class="headerlink" href="#metricas" title="Link to this heading">#</a></h3>
+<p>Las métricas son resultados numéricos usados para evaluar el desempeño. En un problema de regresión como el del curso, métricas como <code class="docutils literal notranslate"><span class="pre">mae</span></code>, <code class="docutils literal notranslate"><span class="pre">rmse</span></code> y <code class="docutils literal notranslate"><span class="pre">r2</span></code> ayudan a comparar modelos desde perspectivas complementarias.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mlflow</span><span class="o">.</span><span class="n">log_metric</span><span class="p">(</span><span class="s2">&quot;mae&quot;</span><span class="p">,</span> <span class="n">mae</span><span class="p">)</span>
+<span class="n">mlflow</span><span class="o">.</span><span class="n">log_metric</span><span class="p">(</span><span class="s2">&quot;rmse&quot;</span><span class="p">,</span> <span class="n">rmse</span><span class="p">)</span>
+<span class="n">mlflow</span><span class="o">.</span><span class="n">log_metric</span><span class="p">(</span><span class="s2">&quot;r2&quot;</span><span class="p">,</span> <span class="n">r2</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="artefactos">
+<h3>Artefactos<a class="headerlink" href="#artefactos" title="Link to this heading">#</a></h3>
+<p>Los artefactos son archivos producidos por el experimento. Guardarlos junto con el run permite revisar evidencia adicional, como gráficos de residuales, reportes de evaluación o el modelo serializado.</p>
+<p>Ejemplos:</p>
+<ul class="simple">
+<li><p>modelo entrenado;</p></li>
+<li><p>matriz de errores;</p></li>
+<li><p>gráfico de residuales;</p></li>
+<li><p>archivo de predicciones;</p></li>
+<li><p>reporte de evaluación.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="flujo-conceptual">
+<h2>🔄 Flujo conceptual<a class="headerlink" href="#flujo-conceptual" title="Link to this heading">#</a></h2>
 <pre  class="mermaid">
         flowchart LR
-    A[Datos] --&gt; B[Notebook]
-    B --&gt; C[Modelo]
-    C --&gt; D[Resultados]
-    </pre><p>Este enfoque funciona en etapas exploratorias, pero presenta limitaciones críticas:</p>
-<ul class="simple">
-<li><p>el código no está estructurado;</p></li>
-<li><p>los datos no están versionados;</p></li>
-<li><p>los experimentos no son trazables;</p></li>
-<li><p>los resultados no son reproducibles;</p></li>
-<li><p>no hay colaboración organizada.</p></li>
-</ul>
-<p>👉 En resumen: <strong>el modelo funciona, pero el proceso no.</strong></p>
+    A[Entrenar modelo] --&gt; B[Registrar parámetros]
+    B --&gt; C[Registrar métricas]
+    C --&gt; D[Guardar artefactos]
+    D --&gt; E[Comparar runs]
+    E --&gt; F[Seleccionar modelo]
+    </pre></section>
+<hr class="docutils" />
+<section id="ejemplo-minimo">
+<h2>🧪 Ejemplo mínimo<a class="headerlink" href="#ejemplo-minimo" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mlflow</span>
+
+<span class="n">mlflow</span><span class="o">.</span><span class="n">set_experiment</span><span class="p">(</span><span class="s2">&quot;session_minutes_regression&quot;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">mlflow</span><span class="o">.</span><span class="n">start_run</span><span class="p">():</span>
+    <span class="n">mlflow</span><span class="o">.</span><span class="n">log_param</span><span class="p">(</span><span class="s2">&quot;model_type&quot;</span><span class="p">,</span> <span class="s2">&quot;linear_regression&quot;</span><span class="p">)</span>
+    <span class="n">mlflow</span><span class="o">.</span><span class="n">log_param</span><span class="p">(</span><span class="s2">&quot;test_size&quot;</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
+
+    <span class="n">mlflow</span><span class="o">.</span><span class="n">log_metric</span><span class="p">(</span><span class="s2">&quot;mae&quot;</span><span class="p">,</span> <span class="n">mae</span><span class="p">)</span>
+    <span class="n">mlflow</span><span class="o">.</span><span class="n">log_metric</span><span class="p">(</span><span class="s2">&quot;rmse&quot;</span><span class="p">,</span> <span class="n">rmse</span><span class="p">)</span>
+    <span class="n">mlflow</span><span class="o">.</span><span class="n">log_metric</span><span class="p">(</span><span class="s2">&quot;r2&quot;</span><span class="p">,</span> <span class="n">r2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Este fragmento no reemplaza el entrenamiento; lo envuelve para dejar evidencia de lo que ocurrió. La idea es que el código siga entrenando y evaluando el modelo, pero que además registre la información necesaria para comparar y auditar el resultado.</p>
 </section>
 <hr class="docutils" />
-<section id="que-cambia-al-pasar-de-data-science-a-mlops">
-<h2>🧱 ¿Qué cambia al pasar de Data Science a MLOps?<a class="headerlink" href="#que-cambia-al-pasar-de-data-science-a-mlops" title="Link to this heading">#</a></h2>
-<p>En ciencia de datos exploratoria, el objetivo principal suele ser encontrar una señal útil en los datos: probar variables, entrenar modelos y comparar métricas. Esa etapa es valiosa porque ayuda a descubrir si el problema tiene potencial predictivo, pero todavía no garantiza que el resultado pueda operar de forma confiable.</p>
-<p>En MLOps, ese objetivo se amplía. Además de obtener un buen modelo, el equipo debe poder responder preguntas operativas:</p>
+<section id="interfaz-de-mlflow">
+<h2>🖥️ Interfaz de MLflow<a class="headerlink" href="#interfaz-de-mlflow" title="Link to this heading">#</a></h2>
+<p>Después de registrar ejecuciones, se puede abrir la interfaz local con:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mlflow<span class="w"> </span>ui
+</pre></div>
+</div>
+<p>Desde allí es posible:</p>
 <ul class="simple">
-<li><p>¿Quién cambió el código y por qué?</p></li>
-<li><p>¿Qué versión del dataset se usó?</p></li>
-<li><p>¿Qué dependencias tenía el entorno?</p></li>
-<li><p>¿Qué parámetros produjo el mejor resultado?</p></li>
-<li><p>¿Cómo se repite el entrenamiento?</p></li>
-<li><p>¿Cómo se detecta que el modelo dejó de funcionar bien?</p></li>
-</ul>
-<p>Por eso MLOps no reemplaza la ciencia de datos. La complementa con prácticas de ingeniería que hacen que los resultados sean reutilizables, auditables y mantenibles.</p>
-</section>
-<hr class="docutils" />
-<section id="cuando-intentamos-escalar">
-<h2>🚨 Cuando intentamos escalar<a class="headerlink" href="#cuando-intentamos-escalar" title="Link to this heading">#</a></h2>
-<p>Cuando este modelo se intenta llevar a producción, el flujo se rompe porque aparecen exigencias que no estaban presentes durante la exploración individual:</p>
-<pre  class="mermaid">
-        flowchart LR
-    A[Datos iniciales] --&gt; B[Notebook]
-    B --&gt; C[Modelo entrenado]
-    C --&gt; D[Resultados prometedores]
-    D --&gt; E[Intento de reproducción]
-    E --&gt; F[Resultados inconsistentes]
-    </pre><p>Esto ocurre porque:</p>
-<ul class="simple">
-<li><p>no sabemos qué versión de los datos se usó;</p></li>
-<li><p>no conocemos los parámetros exactos;</p></li>
-<li><p>el entorno no es replicable;</p></li>
-<li><p>no existe un pipeline definido.</p></li>
+<li><p>comparar runs;</p></li>
+<li><p>ordenar por métricas;</p></li>
+<li><p>revisar parámetros;</p></li>
+<li><p>descargar artefactos;</p></li>
+<li><p>identificar el mejor experimento.</p></li>
 </ul>
 </section>
 <hr class="docutils" />
-<section id="el-cambio-de-mentalidad">
-<h2>🧠 El cambio de mentalidad<a class="headerlink" href="#el-cambio-de-mentalidad" title="Link to this heading">#</a></h2>
-<p>MLOps propone un cambio fundamental en la forma de entender el trabajo:</p>
-<blockquote>
-<div><p>❗ Pasar de construir modelos a construir sistemas.</p>
-</div></blockquote>
-<p>Esto implica pensar en el modelo como una pieza dentro de un proceso más amplio, donde importan tanto las predicciones como la capacidad de repetir, revisar y mejorar el flujo:</p>
-<ul class="simple">
-<li><p>flujos de trabajo completos;</p></li>
-<li><p>control de versiones;</p></li>
-<li><p>trazabilidad;</p></li>
-<li><p>automatización;</p></li>
-<li><p>colaboración.</p></li>
-</ul>
-</section>
-<hr class="docutils" />
-<section id="flujo-mlops-vision-general">
-<h2>🔄 Flujo MLOps (visión general)<a class="headerlink" href="#flujo-mlops-vision-general" title="Link to this heading">#</a></h2>
-<p>Un flujo típico de MLOps se ve así:</p>
-<pre  class="mermaid">
-        flowchart LR
-    A[Datos] --&gt; B[Preprocesamiento]
-    B --&gt; C[Entrenamiento]
-    C --&gt; D[Evaluación]
-    D --&gt; E[Registro de Experimentos]
-    E --&gt; F[Modelo Seleccionado]
-    F --&gt; G[Despliegue]
-    G --&gt; H[Monitoreo]
-    H --&gt; A
-    </pre><p>Este flujo introduce elementos clave que no suelen estar presentes en un notebook aislado:</p>
-<ul class="simple">
-<li><p>ciclo continuo;</p></li>
-<li><p>retroalimentación;</p></li>
-<li><p>control en cada etapa.</p></li>
-</ul>
-</section>
-<hr class="docutils" />
-<section id="componentes-clave-de-mlops">
-<h2>🧩 Componentes clave de MLOps<a class="headerlink" href="#componentes-clave-de-mlops" title="Link to this heading">#</a></h2>
-<section id="versionamiento-de-codigo">
-<h3>🔹 1. Versionamiento de código<a class="headerlink" href="#versionamiento-de-codigo" title="Link to this heading">#</a></h3>
-<p>Permite:</p>
-<ul class="simple">
-<li><p>rastrear cambios;</p></li>
-<li><p>colaborar en equipo;</p></li>
-<li><p>evitar sobrescrituras.</p></li>
-</ul>
-<p>👉 Herramienta: <strong>Git / GitHub</strong></p>
-</section>
-<hr class="docutils" />
-<section id="gestion-de-entornos">
-<h3>🔹 2. Gestión de entornos<a class="headerlink" href="#gestion-de-entornos" title="Link to this heading">#</a></h3>
-<p>Permite:</p>
-<ul class="simple">
-<li><p>reproducir ejecuciones;</p></li>
-<li><p>evitar conflictos de dependencias;</p></li>
-<li><p>garantizar consistencia.</p></li>
-</ul>
-<p>👉 Herramienta: <strong>Poetry</strong></p>
-</section>
-<hr class="docutils" />
-<section id="versionamiento-de-datos">
-<h3>🔹 3. Versionamiento de datos<a class="headerlink" href="#versionamiento-de-datos" title="Link to this heading">#</a></h3>
-<p>Permite:</p>
-<ul class="simple">
-<li><p>saber qué datos se usaron;</p></li>
-<li><p>reproducir experimentos;</p></li>
-<li><p>manejar datasets grandes.</p></li>
-</ul>
-<p>👉 Herramienta: <strong>DVC</strong></p>
-</section>
-<hr class="docutils" />
-<section id="tracking-de-experimentos">
-<h3>🔹 4. Tracking de experimentos<a class="headerlink" href="#tracking-de-experimentos" title="Link to this heading">#</a></h3>
-<p>Permite:</p>
-<ul class="simple">
-<li><p>comparar modelos;</p></li>
-<li><p>registrar métricas;</p></li>
-<li><p>guardar artefactos.</p></li>
-</ul>
-<p>👉 Herramienta: <strong>MLflow</strong></p>
-</section>
-</section>
-<hr class="docutils" />
-<section id="retos-frecuentes-en-proyectos-reales">
-<h2>🚧 Retos frecuentes en proyectos reales<a class="headerlink" href="#retos-frecuentes-en-proyectos-reales" title="Link to this heading">#</a></h2>
-<section id="reproducibilidad">
-<h3>Reproducibilidad<a class="headerlink" href="#reproducibilidad" title="Link to this heading">#</a></h3>
-<p>Un resultado es reproducible cuando otro integrante del equipo puede obtenerlo nuevamente usando el mismo código, los mismos datos y un entorno equivalente.</p>
-<p>Sin reproducibilidad:</p>
-<ul class="simple">
-<li><p>las métricas pierden credibilidad;</p></li>
-<li><p>los errores son difíciles de diagnosticar;</p></li>
-<li><p>la comparación entre modelos se vuelve subjetiva.</p></li>
-</ul>
-</section>
-<hr class="docutils" />
-<section id="escalabilidad">
-<h3>Escalabilidad<a class="headerlink" href="#escalabilidad" title="Link to this heading">#</a></h3>
-<p>Un flujo escala cuando puede crecer en volumen de datos, número de experimentos, usuarios, modelos y miembros del equipo sin volverse inmanejable.</p>
-<p>En MLOps, escalar no significa solo usar más infraestructura. También significa tener procesos claros para:</p>
-<ul class="simple">
-<li><p>automatizar ejecuciones;</p></li>
-<li><p>separar responsabilidades;</p></li>
-<li><p>reutilizar componentes;</p></li>
-<li><p>evitar trabajo manual repetitivo.</p></li>
-</ul>
-</section>
-<hr class="docutils" />
-<section id="mantenimiento">
-<h3>Mantenimiento<a class="headerlink" href="#mantenimiento" title="Link to this heading">#</a></h3>
-<p>Un modelo en producción requiere mantenimiento continuo porque los datos, el comportamiento de los usuarios y las condiciones del negocio cambian.</p>
-<p>Algunos riesgos comunes son:</p>
-<ul class="simple">
-<li><p>degradación del desempeño;</p></li>
-<li><p>cambios en la distribución de variables;</p></li>
-<li><p>dependencias obsoletas;</p></li>
-<li><p>falta de documentación;</p></li>
-<li><p>pérdida de conocimiento cuando cambia el equipo.</p></li>
-</ul>
-</section>
-</section>
-<hr class="docutils" />
-<section id="ecosistema-de-herramientas">
-<h2>🧰 Ecosistema de herramientas<a class="headerlink" href="#ecosistema-de-herramientas" title="Link to this heading">#</a></h2>
-<p>MLOps no depende de una única herramienta. Normalmente se combinan varias piezas, cada una enfocada en un problema específico.</p>
+<section id="mlflow-weights-biases-y-neptune-ai">
+<h2>⚖️ MLflow, Weights &amp; Biases y Neptune.ai<a class="headerlink" href="#mlflow-weights-biases-y-neptune-ai" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
-<tr class="row-odd"><th class="head"><p>Necesidad</p></th>
-<th class="head"><p>Herramientas frecuentes</p></th>
-<th class="head"><p>Rol en el flujo</p></th>
+<tr class="row-odd"><th class="head"><p>Herramienta</p></th>
+<th class="head"><p>Enfoque principal</p></th>
+<th class="head"><p>Comentario</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Versionar código</p></td>
-<td><p>Git, GitHub</p></td>
-<td><p>Historial, ramas, colaboración y Pull Requests</p></td>
+<tr class="row-even"><td><p>MLflow</p></td>
+<td><p>Tracking, modelos, registro y despliegue</p></td>
+<td><p>Muy usado en flujos locales y empresariales</p></td>
 </tr>
-<tr class="row-odd"><td><p>Gestionar entornos</p></td>
-<td><p>Poetry, Conda, pip-tools</p></td>
-<td><p>Dependencias reproducibles</p></td>
+<tr class="row-odd"><td><p>Weights &amp; Biases</p></td>
+<td><p>Seguimiento colaborativo y visualización avanzada</p></td>
+<td><p>Popular en deep learning y equipos de investigación</p></td>
 </tr>
-<tr class="row-even"><td><p>Versionar datos y modelos</p></td>
-<td><p>DVC, Git LFS, LakeFS</p></td>
-<td><p>Trazabilidad de datasets y artefactos grandes</p></td>
-</tr>
-<tr class="row-odd"><td><p>Ejecutar pipelines</p></td>
-<td><p>DVC, Airflow, Prefect</p></td>
-<td><p>Automatización de etapas</p></td>
-</tr>
-<tr class="row-even"><td><p>Registrar experimentos</p></td>
-<td><p>MLflow, Weights &amp; Biases, Neptune.ai</p></td>
-<td><p>Métricas, parámetros, artefactos y comparación</p></td>
-</tr>
-<tr class="row-odd"><td><p>Empaquetar aplicaciones</p></td>
-<td><p>Docker</p></td>
-<td><p>Contenedores portables</p></td>
-</tr>
-<tr class="row-even"><td><p>Orquestar despliegues</p></td>
-<td><p>Kubernetes</p></td>
-<td><p>Escalamiento y operación de servicios</p></td>
+<tr class="row-even"><td><p>Neptune.ai</p></td>
+<td><p>Tracking a gran escala y organización de experimentos</p></td>
+<td><p>Útil cuando hay muchos runs, métricas y usuarios</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>En este módulo trabajaremos con Git/GitHub, Poetry, DVC y MLflow. Airflow, Docker y Kubernetes aparecen como parte del ecosistema porque suelen usarse en módulos posteriores o en entornos productivos más avanzados.</p>
+<p>En este módulo usaremos MLflow porque permite trabajar localmente, se integra bien con Python y cubre los conceptos esenciales de tracking.</p>
 </section>
 <hr class="docutils" />
-<section id="data-science-vs-mlops">
-<h2>⚖️ Data Science vs MLOps<a class="headerlink" href="#data-science-vs-mlops" title="Link to this heading">#</a></h2>
+<section id="conexion-con-git-poetry-y-dvc">
+<h2>🔗 Conexión con Git, Poetry y DVC<a class="headerlink" href="#conexion-con-git-poetry-y-dvc" title="Link to this heading">#</a></h2>
+<p>MLflow no reemplaza a Git, Poetry ni DVC. Los complementa.</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
-<tr class="row-odd"><th class="head"><p>Aspecto</p></th>
-<th class="head"><p>Enfoque tradicional</p></th>
-<th class="head"><p>Enfoque MLOps</p></th>
+<tr class="row-odd"><th class="head"><p>Pregunta</p></th>
+<th class="head"><p>Herramienta</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Código</p></td>
-<td><p>Notebooks aislados</p></td>
-<td><p>Proyectos estructurados</p></td>
+<tr class="row-even"><td><p>¿Qué código se ejecutó?</p></td>
+<td><p>Git</p></td>
 </tr>
-<tr class="row-odd"><td><p>Datos</p></td>
-<td><p>Sin control de versiones</p></td>
-<td><p>Versionados</p></td>
+<tr class="row-odd"><td><p>¿Qué entorno se usó?</p></td>
+<td><p>Poetry</p></td>
 </tr>
-<tr class="row-even"><td><p>Experimentos</p></td>
-<td><p>Manuales</p></td>
-<td><p>Registrados</p></td>
+<tr class="row-even"><td><p>¿Qué datos alimentaron el experimento?</p></td>
+<td><p>DVC</p></td>
 </tr>
-<tr class="row-odd"><td><p>Reproducibilidad</p></td>
-<td><p>Baja</p></td>
-<td><p>Alta</p></td>
-</tr>
-<tr class="row-even"><td><p>Colaboración</p></td>
-<td><p>Limitada</p></td>
-<td><p>Estructurada</p></td>
-</tr>
-<tr class="row-odd"><td><p>Escalabilidad</p></td>
-<td><p>Difícil</p></td>
-<td><p>Natural</p></td>
+<tr class="row-odd"><td><p>¿Qué parámetros, métricas y artefactos produjo?</p></td>
+<td><p>MLflow</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 </section>
 <hr class="docutils" />
-<section id="ejemplo-conceptual">
-<h2>🧪 Ejemplo conceptual<a class="headerlink" href="#ejemplo-conceptual" title="Link to this heading">#</a></h2>
-<section id="enfoque-tradicional">
-<h3>🔴 Enfoque tradicional<a class="headerlink" href="#enfoque-tradicional" title="Link to this heading">#</a></h3>
-<p>Un científico de datos:</p>
-<ul class="simple">
-<li><p>carga datos localmente;</p></li>
-<li><p>entrena un modelo;</p></li>
-<li><p>guarda resultados manualmente.</p></li>
-</ul>
-<p>Problemas:</p>
-<ul class="simple">
-<li><p>nadie más puede reproducirlo;</p></li>
-<li><p>si cambia el dataset, no hay trazabilidad;</p></li>
-<li><p>si el modelo mejora, no hay historial.</p></li>
-</ul>
-</section>
-<hr class="docutils" />
-<section id="enfoque-mlops">
-<h3>🟢 Enfoque MLOps<a class="headerlink" href="#enfoque-mlops" title="Link to this heading">#</a></h3>
-<p>El equipo:</p>
-<ul class="simple">
-<li><p>versiona el código;</p></li>
-<li><p>versiona los datos;</p></li>
-<li><p>define pipelines;</p></li>
-<li><p>registra experimentos;</p></li>
-<li><p>documenta el proceso.</p></li>
-</ul>
-<p>Resultado:</p>
-<ul class="simple">
-<li><p>cualquier persona puede replicar el flujo;</p></li>
-<li><p>los resultados son auditables;</p></li>
-<li><p>el sistema puede escalar.</p></li>
-</ul>
-</section>
-</section>
-<hr class="docutils" />
-<section id="conexion-con-este-modulo">
-<h2>🔗 Conexión con este módulo<a class="headerlink" href="#conexion-con-este-modulo" title="Link to this heading">#</a></h2>
-<p>En este módulo aprenderás a implementar este flujo usando:</p>
-<ul class="simple">
-<li><p>Git → control de versiones</p></li>
-<li><p>Poetry → entornos reproducibles</p></li>
-<li><p>DVC → datos y pipelines</p></li>
-<li><p>MLflow → experimentos</p></li>
-</ul>
-<p>Pero más importante aún:</p>
+<section id="idea-clave">
+<h2>🎯 Idea clave<a class="headerlink" href="#idea-clave" title="Link to this heading">#</a></h2>
 <blockquote>
-<div><p>💡 aprenderás a integrarlos en un sistema coherente.</p>
-</div></blockquote>
-</section>
-<hr class="docutils" />
-<section id="lo-que-viene-a-continuacion">
-<h2>🚀 Lo que viene a continuación<a class="headerlink" href="#lo-que-viene-a-continuacion" title="Link to this heading">#</a></h2>
-<p>En la siguiente sección profundizaremos en:</p>
-<p>👉 el <strong>ciclo de vida completo de un modelo de Machine Learning</strong></p>
-<p>y cómo cada etapa se conecta con prácticas de MLOps.</p>
-</section>
-<hr class="docutils" />
-<section id="idea-clave-para-llevar">
-<h2>🎯 Idea clave para llevar<a class="headerlink" href="#idea-clave-para-llevar" title="Link to this heading">#</a></h2>
-<blockquote>
-<div><p>❗ Un modelo no es el final del proceso.
-👉 Es solo una pieza dentro de un sistema mucho más grande.</p>
+<div><p>💡 Un experimento que no queda registrado es difícil de comparar, auditar y reproducir.</p>
 </div></blockquote>
 </section>
 <hr class="docutils" />
 <section id="lecturas-recomendadas">
 <h2>📚 Lecturas recomendadas<a class="headerlink" href="#lecturas-recomendadas" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://docs.cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning">Google Cloud - MLOps: continuous delivery and automation pipelines in machine learning</a></p></li>
-<li><p><a class="reference external" href="https://git.github.io/git-reference/">Git documentation - Reference</a></p></li>
-<li><p><a class="reference external" href="https://dvc.org/doc/start/data-pipelines/data-pipelines">DVC documentation - Data pipelines</a></p></li>
-<li><p><a class="reference external" href="https://www.mlflow.org/docs/latest/ml/tracking">MLflow documentation - Tracking</a></p></li>
-<li><p><a class="reference external" href="https://python-poetry.org/docs/">Poetry documentation</a></p></li>
+<li><p><a class="reference external" href="https://www.mlflow.org/docs/latest/ml/tracking">MLflow Tracking documentation</a></p></li>
+<li><p><a class="reference external" href="https://docs.wandb.ai/">Weights &amp; Biases documentation</a></p></li>
+<li><p><a class="reference external" href="https://docs.neptune.ai/experiments/">Neptune.ai documentation - Runs</a></p></li>
 </ul>
 </section>
 </section>
@@ -1218,7 +1069,7 @@ document.write(`
         },
         kernelOptions: {
             name: "python3",
-            path: "./unidad_1"
+            path: "./unidad_6"
         },
         predefinedOutput: true
     }
@@ -1236,20 +1087,20 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../caso_estudio.html"
+       href="../unidad_5/13_pipeline_dvc.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">🧩 Caso de Estudio: Predicción del Tiempo de Permanencia de Usuarios</p>
+        <p class="prev-next-title">🔁 Unidad 5: Pipeline de regresión con DVC</p>
       </div>
     </a>
     <a class="right-next"
-       href="02_de_notebook_a_sistema.html"
+       href="15_mlflow_cheatsheet.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">🧪 Unidad 1: De notebook a sistema</p>
+        <p class="prev-next-title">🧾 Unidad 6: MLflow Cheat Sheet</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1269,35 +1120,23 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#que-es-mlops">🔍 ¿Qué es MLOps?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#el-problema-tradicional">⚠️ El problema tradicional</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#que-cambia-al-pasar-de-data-science-a-mlops">🧱 ¿Qué cambia al pasar de Data Science a MLOps?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cuando-intentamos-escalar">🚨 Cuando intentamos escalar</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#el-cambio-de-mentalidad">🧠 El cambio de mentalidad</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flujo-mlops-vision-general">🔄 Flujo MLOps (visión general)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#componentes-clave-de-mlops">🧩 Componentes clave de MLOps</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#versionamiento-de-codigo">🔹 1. Versionamiento de código</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gestion-de-entornos">🔹 2. Gestión de entornos</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#versionamiento-de-datos">🔹 3. Versionamiento de datos</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tracking-de-experimentos">🔹 4. Tracking de experimentos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proposito">🎯 Propósito</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#el-problema-sin-tracking">⚠️ El problema sin tracking</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#que-es-mlflow-tracking">🚀 ¿Qué es MLflow Tracking?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conceptos-clave">🧩 Conceptos clave</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#experimento">Experimento</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run">Run</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parametros">Parámetros</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas">Métricas</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#artefactos">Artefactos</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#retos-frecuentes-en-proyectos-reales">🚧 Retos frecuentes en proyectos reales</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reproducibilidad">Reproducibilidad</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#escalabilidad">Escalabilidad</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mantenimiento">Mantenimiento</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ecosistema-de-herramientas">🧰 Ecosistema de herramientas</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-science-vs-mlops">⚖️ Data Science vs MLOps</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ejemplo-conceptual">🧪 Ejemplo conceptual</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enfoque-tradicional">🔴 Enfoque tradicional</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enfoque-mlops">🟢 Enfoque MLOps</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conexion-con-este-modulo">🔗 Conexión con este módulo</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lo-que-viene-a-continuacion">🚀 Lo que viene a continuación</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#idea-clave-para-llevar">🎯 Idea clave para llevar</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flujo-conceptual">🔄 Flujo conceptual</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ejemplo-minimo">🧪 Ejemplo mínimo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interfaz-de-mlflow">🖥️ Interfaz de MLflow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlflow-weights-biases-y-neptune-ai">⚖️ MLflow, Weights &amp; Biases y Neptune.ai</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conexion-con-git-poetry-y-dvc">🔗 Conexión con Git, Poetry y DVC</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#idea-clave">🎯 Idea clave</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecturas-recomendadas">📚 Lecturas recomendadas</a></li>
 </ul>
   </nav></div>

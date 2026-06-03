@@ -2,13 +2,13 @@
 
 ## 🔍 ¿Qué es MLOps?
 
-MLOps (Machine Learning Operations) es un conjunto de prácticas que busca integrar:
+MLOps (Machine Learning Operations) es un conjunto de prácticas que busca integrar tres perspectivas que tradicionalmente se trabajan por separado:
 
 * **Ciencia de datos**
 * **Ingeniería de software**
 * **DevOps**
 
-con el objetivo de construir sistemas de Machine Learning que sean:
+El objetivo de esa integración es construir sistemas de Machine Learning que no solo produzcan buenas métricas en una etapa experimental, sino que también puedan sostenerse cuando el proyecto crece:
 
 * reproducibles,
 * escalables,
@@ -21,7 +21,7 @@ con el objetivo de construir sistemas de Machine Learning que sean:
 
 En muchos proyectos de ciencia de datos, el flujo típico es el siguiente:
 
-```mermaid
+```{mermaid}
 flowchart LR
     A[Datos] --> B[Notebook]
     B --> C[Modelo]
@@ -40,11 +40,28 @@ Este enfoque funciona en etapas exploratorias, pero presenta limitaciones críti
 
 ---
 
+## 🧱 ¿Qué cambia al pasar de Data Science a MLOps?
+
+En ciencia de datos exploratoria, el objetivo principal suele ser encontrar una señal útil en los datos: probar variables, entrenar modelos y comparar métricas. Esa etapa es valiosa porque ayuda a descubrir si el problema tiene potencial predictivo, pero todavía no garantiza que el resultado pueda operar de forma confiable.
+
+En MLOps, ese objetivo se amplía. Además de obtener un buen modelo, el equipo debe poder responder preguntas operativas:
+
+* ¿Quién cambió el código y por qué?
+* ¿Qué versión del dataset se usó?
+* ¿Qué dependencias tenía el entorno?
+* ¿Qué parámetros produjo el mejor resultado?
+* ¿Cómo se repite el entrenamiento?
+* ¿Cómo se detecta que el modelo dejó de funcionar bien?
+
+Por eso MLOps no reemplaza la ciencia de datos. La complementa con prácticas de ingeniería que hacen que los resultados sean reutilizables, auditables y mantenibles.
+
+---
+
 ## 🚨 Cuando intentamos escalar
 
-Cuando este modelo se intenta llevar a producción, el flujo se rompe:
+Cuando este modelo se intenta llevar a producción, el flujo se rompe porque aparecen exigencias que no estaban presentes durante la exploración individual:
 
-```mermaid
+```{mermaid}
 flowchart LR
     A[Datos iniciales] --> B[Notebook]
     B --> C[Modelo entrenado]
@@ -64,11 +81,11 @@ Esto ocurre porque:
 
 ## 🧠 El cambio de mentalidad
 
-MLOps propone un cambio fundamental:
+MLOps propone un cambio fundamental en la forma de entender el trabajo:
 
 > ❗ Pasar de construir modelos a construir sistemas.
 
-Esto implica pensar en:
+Esto implica pensar en el modelo como una pieza dentro de un proceso más amplio, donde importan tanto las predicciones como la capacidad de repetir, revisar y mejorar el flujo:
 
 * flujos de trabajo completos;
 * control de versiones;
@@ -82,7 +99,7 @@ Esto implica pensar en:
 
 Un flujo típico de MLOps se ve así:
 
-```mermaid
+```{mermaid}
 flowchart LR
     A[Datos] --> B[Preprocesamiento]
     B --> C[Entrenamiento]
@@ -94,7 +111,7 @@ flowchart LR
     H --> A
 ```
 
-Este flujo introduce elementos clave:
+Este flujo introduce elementos clave que no suelen estar presentes en un notebook aislado:
 
 * ciclo continuo;
 * retroalimentación;
@@ -149,6 +166,65 @@ Permite:
 * guardar artefactos.
 
 👉 Herramienta: **MLflow**
+
+---
+
+## 🚧 Retos frecuentes en proyectos reales
+
+### Reproducibilidad
+
+Un resultado es reproducible cuando otro integrante del equipo puede obtenerlo nuevamente usando el mismo código, los mismos datos y un entorno equivalente.
+
+Sin reproducibilidad:
+
+* las métricas pierden credibilidad;
+* los errores son difíciles de diagnosticar;
+* la comparación entre modelos se vuelve subjetiva.
+
+---
+
+### Escalabilidad
+
+Un flujo escala cuando puede crecer en volumen de datos, número de experimentos, usuarios, modelos y miembros del equipo sin volverse inmanejable.
+
+En MLOps, escalar no significa solo usar más infraestructura. También significa tener procesos claros para:
+
+* automatizar ejecuciones;
+* separar responsabilidades;
+* reutilizar componentes;
+* evitar trabajo manual repetitivo.
+
+---
+
+### Mantenimiento
+
+Un modelo en producción requiere mantenimiento continuo porque los datos, el comportamiento de los usuarios y las condiciones del negocio cambian.
+
+Algunos riesgos comunes son:
+
+* degradación del desempeño;
+* cambios en la distribución de variables;
+* dependencias obsoletas;
+* falta de documentación;
+* pérdida de conocimiento cuando cambia el equipo.
+
+---
+
+## 🧰 Ecosistema de herramientas
+
+MLOps no depende de una única herramienta. Normalmente se combinan varias piezas, cada una enfocada en un problema específico.
+
+| Necesidad | Herramientas frecuentes | Rol en el flujo |
+| --- | --- | --- |
+| Versionar código | Git, GitHub | Historial, ramas, colaboración y Pull Requests |
+| Gestionar entornos | Poetry, Conda, pip-tools | Dependencias reproducibles |
+| Versionar datos y modelos | DVC, Git LFS, LakeFS | Trazabilidad de datasets y artefactos grandes |
+| Ejecutar pipelines | DVC, Airflow, Prefect | Automatización de etapas |
+| Registrar experimentos | MLflow, Weights & Biases, Neptune.ai | Métricas, parámetros, artefactos y comparación |
+| Empaquetar aplicaciones | Docker | Contenedores portables |
+| Orquestar despliegues | Kubernetes | Escalamiento y operación de servicios |
+
+En este módulo trabajaremos con Git/GitHub, Poetry, DVC y MLflow. Airflow, Docker y Kubernetes aparecen como parte del ecosistema porque suelen usarse en módulos posteriores o en entornos productivos más avanzados.
 
 ---
 
@@ -232,3 +308,11 @@ y cómo cada etapa se conecta con prácticas de MLOps.
 > 👉 Es solo una pieza dentro de un sistema mucho más grande.
 
 ---
+
+## 📚 Lecturas recomendadas
+
+* [Google Cloud - MLOps: continuous delivery and automation pipelines in machine learning](https://docs.cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning)
+* [Git documentation - Reference](https://git.github.io/git-reference/)
+* [DVC documentation - Data pipelines](https://dvc.org/doc/start/data-pipelines/data-pipelines)
+* [MLflow documentation - Tracking](https://www.mlflow.org/docs/latest/ml/tracking)
+* [Poetry documentation](https://python-poetry.org/docs/)

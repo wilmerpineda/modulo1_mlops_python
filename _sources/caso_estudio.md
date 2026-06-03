@@ -160,5 +160,3 @@ En la siguiente sección comenzaremos a analizar:
 👉 cómo un flujo típico basado en notebooks evoluciona hacia un sistema estructurado
 
 y por qué este cambio es fundamental en entornos reales.
-
----

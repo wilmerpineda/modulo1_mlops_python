@@ -1,0 +1,1552 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>🔁 Unidad 5: Pipeline de regresión con DVC &#8212; MLOps en Python</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = `pre.mermaid {
+    /* Same as .mermaid-container > pre */
+    display: block;
+    width: 100%;
+}
+
+pre.mermaid > svg {
+    /* Same as .mermaid-container > pre > svg */
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}`;
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = `.mermaid-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.mermaid-container > pre {
+    display: block;
+    width: 100%;
+}
+
+.mermaid-container > pre > svg {
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}
+
+.mermaid-fullscreen-btn {
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+    color: #333;
+}
+
+.mermaid-fullscreen-btn:hover {
+    opacity: 100% !important;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-btn.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-btn.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal {
+    display: none;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 95vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 9999;
+    padding: 20px;
+    overflow: auto;
+}
+
+.mermaid-fullscreen-modal.dark-theme {
+    background: rgba(0, 0, 0, 0.98);
+}
+
+.mermaid-fullscreen-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen {
+    position: relative;
+    width: 95vw;
+    height: 90vh;
+    max-width: 95vw;
+    max-height: 90vh;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen.dark-theme {
+    background: #1a1a1a;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.mermaid-container-fullscreen pre.mermaid {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen .mermaid svg {
+    height: 100% !important;
+    width: 100% !important;
+    cursor: grab;
+}
+
+.mermaid-fullscreen-close {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s;
+    font-size: 24px;
+    line-height: 1;
+    color: #333;
+}
+
+.mermaid-fullscreen-close:hover {
+    background: white;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-close.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-close.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
+    display: none !important;
+}`;
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        all_mermaids.forEach((el) => {
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+        await mermaid.run();
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+
+    if ("False" === "True") {
+        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("");
+            if(all_mermaids.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            } else if(svgs.size() !== mermaids_to_add_zoom) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            } else {
+                svgs.each(function() {
+                    var svg = d3.select(this);
+                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+                    var inner = svg.select("g");
+                    var zoom = d3.zoom().on("zoom", function(event) {
+                        inner.attr("transform", event.transform);
+                    });
+                    svg.call(zoom);
+                });
+            }
+        }
+    } else if(all_mermaids.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if ("True" !== "True") return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    const closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = '⛶';
+        fullscreenBtn.style.opacity = '50%';
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scroll, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.sdisplay = 'block';
+
+                if ("False" === "True") {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+const load = async () => {
+    initStyles();
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...JSON.parse(
+                    `{"startOnLoad": false}`
+                ),
+                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...JSON.parse(
+        `{"startOnLoad": false}`
+    ),
+    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    }
+);
+
+window.addEventListener("load", load);</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'unidad_5/13_pipeline_dvc';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="📊 Unidad 6: Fundamentos de tracking de experimentos con MLflow" href="../unidad_6/14_mlflow_fundamentos.html" />
+    <link rel="prev" title="🧾 Unidad 5: DVC Cheat Sheet" href="12_dvc_cheatsheet.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo_santoto.png" class="logo__image only-light" alt="MLOps en Python - Home"/>
+    <script>document.write(`<img src="../_static/logo_santoto.png" class="logo__image only-dark" alt="MLOps en Python - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    📘 Módulo 1: Fundamentos de MLOps y Gestión del Ciclo de Vida
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Resultados de Aprendizaje y Caso de Estudio</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../resultados_aprendizaje.html">🎯 Resultados de Aprendizaje del Módulo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../caso_estudio.html">🧩 Caso de Estudio: Predicción del Tiempo de Permanencia de Usuarios</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 1. Introducción a MLOps</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_1/01_panorama_mlops.html">🧭 Unidad 1: Panorama de MLOps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_1/02_de_notebook_a_sistema.html">🧪 Unidad 1: De notebook a sistema</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 2. Ciclo de vida del modelo</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_2/03_ciclo_vida_modelo.html">🔄 Unidad 2: Ciclo de Vida de un Modelo de Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_2/04_pipeline_base_regresion.html">🧪 Unidad 2: Pipeline base de regresión</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 3. Git y GitHub</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_3/05_git_fundamentos.html">🔧 Unidad 3: Fundamentos de Git y GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_3/06_git_cheatsheet.html">🧾 Unidad 3: Git Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_3/07_git_github_flujo_equipo.html">🤝 Unidad 3: Git y GitHub: flujo de trabajo en equipo</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 4. Gestión de entornos con Poetry</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_4/08_poetry_fundamentos.html">📦 Unidad 4: Fundamentos de gestión de entornos con Poetry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_4/09_poetry_cheatsheet.html">🧾 Unidad 4: Poetry Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_4/10_entornos_reproducibles.html">🔁 Unidad 4: Entornos reproducibles en proyectos de Machine Learning</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 5. Reproducibilidad con DVC</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="11_dvc_fundamentos.html">📦 Unidad 5: Fundamentos de versionamiento de datos con DVC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_dvc_cheatsheet.html">🧾 Unidad 5: DVC Cheat Sheet</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">🔁 Unidad 5: Pipeline de regresión con DVC</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 6. Tracking de experimentos con MLflow</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_6/14_mlflow_fundamentos.html">📊 Unidad 6: Fundamentos de tracking de experimentos con MLflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_6/15_mlflow_cheatsheet.html">🧾 Unidad 6: MLflow Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_6/16_reproducibilidad_auditoria.html">🔍 Unidad 6: Reproducibilidad y auditoría del proceso experimental</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 7. Integración del flujo MLOps</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_7/17_estructura_proyecto_ml.html">🗂️ Unidad 7: Estructuración profesional de proyectos de Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_7/18_ecosistema_herramientas.html">🧰 Unidad 7: Ecosistema de herramientas MLOps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_7/19_checklist_modulo.html">✅ Unidad 7: Checklist integrador del módulo</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/unidad_5/13_pipeline_dvc.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>🔁 Unidad 5: Pipeline de regresión con DVC</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objetivos-de-aprendizaje">Objetivos de aprendizaje</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#que-problema-resuelve-un-pipeline">1. ¿Qué problema resuelve un pipeline?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#etapas-del-pipeline-para-el-caso-de-regresion">2. Etapas del pipeline para el caso de regresión</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generacion-del-dataset-base">3. Generación del dataset base</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#separacion-conceptual-por-etapas">4. Separación conceptual por etapas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parametrizacion-del-modelo">5. Parametrización del modelo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entrenamiento-del-pipeline">6. Entrenamiento del pipeline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#como-se-veria-esto-en-dvc">7. ¿Cómo se vería esto en DVC?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-del-dvc-yaml">8. Interpretación del <code class="docutils literal notranslate"><span class="pre">dvc.yaml</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flujo-conceptual-completo-con-dvc">9. Flujo conceptual completo con DVC</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#que-gana-el-proyecto-con-esto">10. ¿Qué gana el proyecto con esto?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limitaciones-actuales-del-notebook">11. Limitaciones actuales del notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ejercicio-guiado">12. Ejercicio guiado</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#idea-clave-de-cierre">13. Idea clave de cierre</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="unidad-5-pipeline-de-regresion-con-dvc">
+<h1>🔁 Unidad 5: Pipeline de regresión con DVC<a class="headerlink" href="#unidad-5-pipeline-de-regresion-con-dvc" title="Link to this heading">#</a></h1>
+<p>En este notebook se mostrará cómo un flujo de modelado puede evolucionar hacia un <strong>pipeline reproducible</strong> apoyado en DVC. La idea central no es usar DVC solo como herramienta de versionamiento de archivos, sino como mecanismo para formalizar etapas, dependencias y salidas dentro de un proyecto de Machine Learning.</p>
+<section id="objetivos-de-aprendizaje">
+<h2>Objetivos de aprendizaje<a class="headerlink" href="#objetivos-de-aprendizaje" title="Link to this heading">#</a></h2>
+<p>Al finalizar este notebook, el estudiante podrá:</p>
+<ul class="simple">
+<li><p>identificar las etapas mínimas de un pipeline de Machine Learning;</p></li>
+<li><p>estructurar dependencias y salidas de un flujo reproducible;</p></li>
+<li><p>conectar la lógica de modelado con archivos como <code class="docutils literal notranslate"><span class="pre">dvc.yaml</span></code> y <code class="docutils literal notranslate"><span class="pre">params.yaml</span></code>;</p></li>
+<li><p>reconocer el papel de DVC dentro de un proyecto MLOps.</p></li>
+</ul>
+</section>
+<section id="que-problema-resuelve-un-pipeline">
+<h2>1. ¿Qué problema resuelve un pipeline?<a class="headerlink" href="#que-problema-resuelve-un-pipeline" title="Link to this heading">#</a></h2>
+<p>En un notebook exploratorio, el flujo de trabajo depende del orden de ejecución de las celdas. En cambio, en un pipeline bien definido, cada etapa tiene:</p>
+<ul class="simple">
+<li><p><strong>entradas</strong> claras;</p></li>
+<li><p><strong>procesos</strong> identificables;</p></li>
+<li><p><strong>salidas</strong> explícitas.</p></li>
+</ul>
+<p>Esto permite repetir el flujo bajo las mismas condiciones y facilita la automatización.</p>
+</section>
+<section id="etapas-del-pipeline-para-el-caso-de-regresion">
+<h2>2. Etapas del pipeline para el caso de regresión<a class="headerlink" href="#etapas-del-pipeline-para-el-caso-de-regresion" title="Link to this heading">#</a></h2>
+<p>En nuestro caso de estudio, una estructura básica podría ser:</p>
+<pre  class="mermaid">
+        flowchart LR
+    A[Generación o carga de datos] --&gt; B[Preprocesamiento]
+    B --&gt; C[Entrenamiento]
+    C --&gt; D[Evaluación]
+    </pre><p>Cada una de estas etapas podría convertirse en un script dentro de la carpeta <code class="docutils literal notranslate"><span class="pre">src/</span></code>.</p>
+</section>
+<section id="generacion-del-dataset-base">
+<h2>3. Generación del dataset base<a class="headerlink" href="#generacion-del-dataset-base" title="Link to this heading">#</a></h2>
+<p>Para mantener este notebook autocontenido, reutilizaremos un generador de datos simulado. En un proyecto real, esta etapa estaría en un script independiente como <code class="docutils literal notranslate"><span class="pre">src/data/make_dataset.py</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn.compose</span> <span class="kn">import</span> <span class="n">ColumnTransformer</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestRegressor</span>
+<span class="kn">from</span> <span class="nn">sklearn.impute</span> <span class="kn">import</span> <span class="n">SimpleImputer</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_absolute_error</span><span class="p">,</span> <span class="n">mean_squared_error</span><span class="p">,</span> <span class="n">r2_score</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">OneHotEncoder</span><span class="p">,</span> <span class="n">StandardScaler</span>
+
+<span class="n">RANDOM_STATE</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">generate_session_dataset</span><span class="p">(</span><span class="n">n_samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">random_state</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a mock dataset for session duration prediction.&quot;&quot;&quot;</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+
+    <span class="n">sites</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;MLA&quot;</span><span class="p">,</span> <span class="s2">&quot;MLB&quot;</span><span class="p">,</span> <span class="s2">&quot;MLC&quot;</span><span class="p">,</span> <span class="s2">&quot;MLM&quot;</span><span class="p">])</span>
+    <span class="n">device_os</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;android&quot;</span><span class="p">,</span> <span class="s2">&quot;ios&quot;</span><span class="p">,</span> <span class="s2">&quot;web&quot;</span><span class="p">])</span>
+    <span class="n">segments</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;new&quot;</span><span class="p">,</span> <span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="s2">&quot;at_risk&quot;</span><span class="p">,</span> <span class="s2">&quot;churned&quot;</span><span class="p">])</span>
+    <span class="n">entry_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;home&quot;</span><span class="p">,</span> <span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="s2">&quot;recommendation&quot;</span><span class="p">,</span> <span class="s2">&quot;push&quot;</span><span class="p">,</span> <span class="s2">&quot;email&quot;</span><span class="p">])</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+        <span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_samples</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="s2">&quot;site&quot;</span><span class="p">:</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">sites</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">]),</span>
+        <span class="s2">&quot;device_os&quot;</span><span class="p">:</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">device_os</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="mf">0.55</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">]),</span>
+        <span class="s2">&quot;segment&quot;</span><span class="p">:</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">segments</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="mf">0.20</span><span class="p">,</span> <span class="mf">0.45</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">]),</span>
+        <span class="s2">&quot;entry_point&quot;</span><span class="p">:</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">entry_points</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">]),</span>
+        <span class="s2">&quot;hour_of_day&quot;</span><span class="p">:</span> <span class="n">rng</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_samples</span><span class="p">),</span>
+        <span class="s2">&quot;day_of_week&quot;</span><span class="p">:</span> <span class="n">rng</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_samples</span><span class="p">),</span>
+        <span class="s2">&quot;historical_avg_session_minutes&quot;</span><span class="p">:</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">35.0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_samples</span><span class="p">),</span>
+        <span class="s2">&quot;historical_sessions_last_7d&quot;</span><span class="p">:</span> <span class="n">rng</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_samples</span><span class="p">),</span>
+        <span class="s2">&quot;days_since_last_session&quot;</span><span class="p">:</span> <span class="n">rng</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_samples</span><span class="p">),</span>
+        <span class="s2">&quot;push_received_last_24h&quot;</span><span class="p">:</span> <span class="n">rng</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_samples</span><span class="p">),</span>
+    <span class="p">})</span>
+
+    <span class="n">segment_effect</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;segment&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">({</span>
+        <span class="s2">&quot;new&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.5</span><span class="p">,</span>
+        <span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="mf">3.5</span><span class="p">,</span>
+        <span class="s2">&quot;at_risk&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">,</span>
+        <span class="s2">&quot;churned&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
+    <span class="p">})</span>
+    <span class="n">entry_effect</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;entry_point&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">({</span>
+        <span class="s2">&quot;home&quot;</span><span class="p">:</span> <span class="mf">1.2</span><span class="p">,</span>
+        <span class="s2">&quot;search&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>
+        <span class="s2">&quot;recommendation&quot;</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">,</span>
+        <span class="s2">&quot;push&quot;</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span>
+        <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
+    <span class="p">})</span>
+    <span class="n">device_effect</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;device_os&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">({</span>
+        <span class="s2">&quot;android&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+        <span class="s2">&quot;ios&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
+        <span class="s2">&quot;web&quot;</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span>
+    <span class="p">})</span>
+
+    <span class="n">hour_effect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;hour_of_day&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">between</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">22</span><span class="p">),</span> <span class="mf">2.2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">weekend_effect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;day_of_week&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]),</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">noise</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_samples</span><span class="p">)</span>
+
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;session_minutes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mf">1.5</span>
+        <span class="o">+</span> <span class="mf">0.55</span> <span class="o">*</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;historical_avg_session_minutes&quot;</span><span class="p">]</span>
+        <span class="o">+</span> <span class="mf">0.30</span> <span class="o">*</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;historical_sessions_last_7d&quot;</span><span class="p">]</span>
+        <span class="o">-</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;days_since_last_session&quot;</span><span class="p">]</span>
+        <span class="o">-</span> <span class="mf">0.40</span> <span class="o">*</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;push_received_last_24h&quot;</span><span class="p">]</span>
+        <span class="o">+</span> <span class="n">segment_effect</span>
+        <span class="o">+</span> <span class="n">entry_effect</span>
+        <span class="o">+</span> <span class="n">device_effect</span>
+        <span class="o">+</span> <span class="n">hour_effect</span>
+        <span class="o">+</span> <span class="n">weekend_effect</span>
+        <span class="o">+</span> <span class="n">noise</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">lower</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">data</span>
+
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">generate_session_dataset</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">25000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>user_id</th>
+      <th>site</th>
+      <th>device_os</th>
+      <th>segment</th>
+      <th>entry_point</th>
+      <th>hour_of_day</th>
+      <th>day_of_week</th>
+      <th>historical_avg_session_minutes</th>
+      <th>historical_sessions_last_7d</th>
+      <th>days_since_last_session</th>
+      <th>push_received_last_24h</th>
+      <th>session_minutes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>MLM</td>
+      <td>web</td>
+      <td>churned</td>
+      <td>email</td>
+      <td>23</td>
+      <td>0</td>
+      <td>15.777379</td>
+      <td>10</td>
+      <td>8</td>
+      <td>2</td>
+      <td>10.856501</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>MLB</td>
+      <td>web</td>
+      <td>active</td>
+      <td>search</td>
+      <td>22</td>
+      <td>0</td>
+      <td>20.977217</td>
+      <td>21</td>
+      <td>16</td>
+      <td>0</td>
+      <td>27.329135</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>MLM</td>
+      <td>web</td>
+      <td>active</td>
+      <td>email</td>
+      <td>23</td>
+      <td>2</td>
+      <td>18.077159</td>
+      <td>21</td>
+      <td>19</td>
+      <td>3</td>
+      <td>17.907926</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>MLC</td>
+      <td>android</td>
+      <td>new</td>
+      <td>push</td>
+      <td>22</td>
+      <td>1</td>
+      <td>21.220637</td>
+      <td>19</td>
+      <td>11</td>
+      <td>4</td>
+      <td>16.236853</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>MLA</td>
+      <td>android</td>
+      <td>active</td>
+      <td>push</td>
+      <td>21</td>
+      <td>0</td>
+      <td>30.180595</td>
+      <td>19</td>
+      <td>27</td>
+      <td>2</td>
+      <td>20.304020</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="separacion-conceptual-por-etapas">
+<h2>4. Separación conceptual por etapas<a class="headerlink" href="#separacion-conceptual-por-etapas" title="Link to this heading">#</a></h2>
+<p>Un pipeline reproducible no depende de que todo esté en una sola celda. Podemos pensar el flujo en tres funciones principales:</p>
+<ol class="arabic simple">
+<li><p>preparar datos;</p></li>
+<li><p>entrenar modelo;</p></li>
+<li><p>evaluar resultados.</p></li>
+</ol>
+<p>En un proyecto real, estas funciones vivirían en scripts independientes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">split_dataset</span><span class="p">(</span><span class="n">dataframe</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Split dataset into train and test partitions.&quot;&quot;&quot;</span>
+    <span class="n">target_column</span> <span class="o">=</span> <span class="s2">&quot;session_minutes&quot;</span>
+    <span class="n">feature_columns</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;site&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;device_os&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;segment&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;entry_point&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;hour_of_day&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;day_of_week&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;historical_avg_session_minutes&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;historical_sessions_last_7d&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;days_since_last_session&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;push_received_last_24h&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">X</span> <span class="o">=</span> <span class="n">dataframe</span><span class="p">[</span><span class="n">feature_columns</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">dataframe</span><span class="p">[</span><span class="n">target_column</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">train_test_split</span><span class="p">(</span>
+        <span class="n">X</span><span class="p">,</span>
+        <span class="n">y</span><span class="p">,</span>
+        <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+        <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">build_regression_pipeline</span><span class="p">(</span><span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pipeline</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a regression pipeline from a parameter dictionary.&quot;&quot;&quot;</span>
+    <span class="n">categorical_features</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;site&quot;</span><span class="p">,</span> <span class="s2">&quot;device_os&quot;</span><span class="p">,</span> <span class="s2">&quot;segment&quot;</span><span class="p">,</span> <span class="s2">&quot;entry_point&quot;</span><span class="p">]</span>
+    <span class="n">numeric_features</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;hour_of_day&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;day_of_week&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;historical_avg_session_minutes&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;historical_sessions_last_7d&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;days_since_last_session&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;push_received_last_24h&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">numeric_transformer</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span>
+        <span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+            <span class="p">(</span><span class="s2">&quot;imputer&quot;</span><span class="p">,</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;median&quot;</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s2">&quot;scaler&quot;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="n">categorical_transformer</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span>
+        <span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+            <span class="p">(</span><span class="s2">&quot;imputer&quot;</span><span class="p">,</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;most_frequent&quot;</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s2">&quot;onehot&quot;</span><span class="p">,</span> <span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">handle_unknown</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">)),</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="n">preprocessor</span> <span class="o">=</span> <span class="n">ColumnTransformer</span><span class="p">(</span>
+        <span class="n">transformers</span><span class="o">=</span><span class="p">[</span>
+            <span class="p">(</span><span class="s2">&quot;num&quot;</span><span class="p">,</span> <span class="n">numeric_transformer</span><span class="p">,</span> <span class="n">numeric_features</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;cat&quot;</span><span class="p">,</span> <span class="n">categorical_transformer</span><span class="p">,</span> <span class="n">categorical_features</span><span class="p">),</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="n">regressor</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span>
+        <span class="n">n_estimators</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;n_estimators&quot;</span><span class="p">],</span>
+        <span class="n">max_depth</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;max_depth&quot;</span><span class="p">],</span>
+        <span class="n">min_samples_split</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;min_samples_split&quot;</span><span class="p">],</span>
+        <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">,</span>
+        <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Pipeline</span><span class="p">(</span>
+        <span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+            <span class="p">(</span><span class="s2">&quot;preprocessor&quot;</span><span class="p">,</span> <span class="n">preprocessor</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;regressor&quot;</span><span class="p">,</span> <span class="n">regressor</span><span class="p">),</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">evaluate_regression_model</span><span class="p">(</span><span class="n">y_true</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute evaluation metrics for a regression model.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;mae&quot;</span><span class="p">:</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">),</span>
+        <span class="s2">&quot;rmse&quot;</span><span class="p">:</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="s2">&quot;r2&quot;</span><span class="p">:</span> <span class="n">r2_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">),</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="parametrizacion-del-modelo">
+<h2>5. Parametrización del modelo<a class="headerlink" href="#parametrizacion-del-modelo" title="Link to this heading">#</a></h2>
+<p>Una idea central en DVC es separar la lógica del pipeline de los parámetros del experimento. Para ello, en un proyecto real se usaría un archivo <code class="docutils literal notranslate"><span class="pre">params.yaml</span></code>.</p>
+<p>Aquí simularemos esa idea con un diccionario Python.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;n_estimators&quot;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
+    <span class="s2">&quot;max_depth&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="s2">&quot;min_samples_split&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{
+  &quot;n_estimators&quot;: 200,
+  &quot;max_depth&quot;: 10,
+  &quot;min_samples_split&quot;: 4
+}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="entrenamiento-del-pipeline">
+<h2>6. Entrenamiento del pipeline<a class="headerlink" href="#entrenamiento-del-pipeline" title="Link to this heading">#</a></h2>
+<p>Ahora conectaremos las funciones anteriores para simular una ejecución estructurada del pipeline.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">split_dataset</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">pipeline</span> <span class="o">=</span> <span class="n">build_regression_pipeline</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">predictions</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">metrics</span> <span class="o">=</span> <span class="n">evaluate_regression_model</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predictions</span><span class="p">)</span>
+<span class="n">metrics</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\legion\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\sklearn\metrics\_regression.py:492: FutureWarning: &#39;squared&#39; is deprecated in version 1.4 and will be removed in 1.6. To calculate the root mean squared error, use the function&#39;root_mean_squared_error&#39;.
+  warnings.warn(
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;mae&#39;: 2.173471257911695, &#39;rmse&#39;: 2.744329751002754, &#39;r2&#39;: 0.8536388270785888}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">metrics_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;metric&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">metrics</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
+        <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">metrics</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+<span class="n">metrics_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>metric</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>mae</td>
+      <td>2.173471</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>rmse</td>
+      <td>2.744330</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>r2</td>
+      <td>0.853639</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="como-se-veria-esto-en-dvc">
+<h2>7. ¿Cómo se vería esto en DVC?<a class="headerlink" href="#como-se-veria-esto-en-dvc" title="Link to this heading">#</a></h2>
+<p>Hasta ahora, el flujo ya es más ordenado que en un notebook exploratorio. Pero DVC va un paso más allá: permite declarar formalmente las etapas en un archivo <code class="docutils literal notranslate"><span class="pre">dvc.yaml</span></code>.</p>
+<p>Un ejemplo conceptual podría ser:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dvc_yaml_example</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;stages:</span>
+<span class="s1">  prepare_data:</span>
+<span class="s1">    cmd: python src/data/make_dataset.py</span>
+<span class="s1">    deps:</span>
+<span class="s1">      - src/data/make_dataset.py</span>
+<span class="s1">    outs:</span>
+<span class="s1">      - data/raw/session_data.csv</span>
+
+<span class="s1">  train_model:</span>
+<span class="s1">    cmd: python src/models/train_model.py</span>
+<span class="s1">    deps:</span>
+<span class="s1">      - src/models/train_model.py</span>
+<span class="s1">      - data/raw/session_data.csv</span>
+<span class="s1">      - params.yaml</span>
+<span class="s1">    outs:</span>
+<span class="s1">      - models/regression_model.pkl</span>
+
+<span class="s1">  evaluate_model:</span>
+<span class="s1">    cmd: python src/evaluation/evaluate_model.py</span>
+<span class="s1">    deps:</span>
+<span class="s1">      - src/evaluation/evaluate_model.py</span>
+<span class="s1">      - models/regression_model.pkl</span>
+<span class="s1">      - data/raw/session_data.csv</span>
+<span class="s1">    outs:</span>
+<span class="s1">      - outputs/metrics.json</span>
+<span class="s1">&#39;&#39;&#39;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">dvc_yaml_example</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>stages:
+  prepare_data:
+    cmd: python src/data/make_dataset.py
+    deps:
+      - src/data/make_dataset.py
+    outs:
+      - data/raw/session_data.csv
+
+  train_model:
+    cmd: python src/models/train_model.py
+    deps:
+      - src/models/train_model.py
+      - data/raw/session_data.csv
+      - params.yaml
+    outs:
+      - models/regression_model.pkl
+
+  evaluate_model:
+    cmd: python src/evaluation/evaluate_model.py
+    deps:
+      - src/evaluation/evaluate_model.py
+      - models/regression_model.pkl
+      - data/raw/session_data.csv
+    outs:
+      - outputs/metrics.json
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretacion-del-dvc-yaml">
+<h2>8. Interpretación del <code class="docutils literal notranslate"><span class="pre">dvc.yaml</span></code><a class="headerlink" href="#interpretacion-del-dvc-yaml" title="Link to this heading">#</a></h2>
+<p>Observa que en este archivo cada etapa declara:</p>
+<ul class="simple">
+<li><p><strong>cmd</strong>: qué se ejecuta;</p></li>
+<li><p><strong>deps</strong>: de qué archivos depende;</p></li>
+<li><p><strong>outs</strong>: qué produce.</p></li>
+</ul>
+<p>Esto permite que DVC sepa exactamente qué debe volver a ejecutar si cambian los datos, los parámetros o el código.</p>
+</section>
+<section id="flujo-conceptual-completo-con-dvc">
+<h2>9. Flujo conceptual completo con DVC<a class="headerlink" href="#flujo-conceptual-completo-con-dvc" title="Link to this heading">#</a></h2>
+<pre  class="mermaid">
+        flowchart LR
+    A[params.yaml] --&gt; C[train_model.py]
+    B[data/raw/session_data.csv] --&gt; C[train_model.py]
+    C --&gt; D[models/regression_model.pkl]
+    D --&gt; E[evaluate_model.py]
+    B --&gt; E[evaluate_model.py]
+    E --&gt; F[outputs/metrics.json]
+    </pre><p>Aquí ya no hablamos solo de código, sino de una <strong>red explícita de dependencias</strong>.</p>
+</section>
+<section id="que-gana-el-proyecto-con-esto">
+<h2>10. ¿Qué gana el proyecto con esto?<a class="headerlink" href="#que-gana-el-proyecto-con-esto" title="Link to this heading">#</a></h2>
+<p>Al formalizar el flujo con DVC, el proyecto gana:</p>
+<ul class="simple">
+<li><p>reproducibilidad;</p></li>
+<li><p>trazabilidad de datos y salidas;</p></li>
+<li><p>control explícito de dependencias;</p></li>
+<li><p>facilidad para ejecutar nuevamente el pipeline.</p></li>
+</ul>
+<p>En otras palabras, dejamos de depender del orden manual de ejecución del notebook.</p>
+</section>
+<section id="limitaciones-actuales-del-notebook">
+<h2>11. Limitaciones actuales del notebook<a class="headerlink" href="#limitaciones-actuales-del-notebook" title="Link to this heading">#</a></h2>
+<p>Aunque este notebook ya representa un paso importante, todavía no es un proyecto MLOps completo. Aún faltaría:</p>
+<ul class="simple">
+<li><p>mover cada etapa a scripts independientes;</p></li>
+<li><p>definir <code class="docutils literal notranslate"><span class="pre">params.yaml</span></code> como archivo real;</p></li>
+<li><p>versionar datos con <code class="docutils literal notranslate"><span class="pre">dvc</span> <span class="pre">add</span></code>;</p></li>
+<li><p>registrar experimentos con MLflow;</p></li>
+<li><p>integrar el entorno con Poetry.</p></li>
+</ul>
+</section>
+<section id="ejercicio-guiado">
+<h2>12. Ejercicio guiado<a class="headerlink" href="#ejercicio-guiado" title="Link to this heading">#</a></h2>
+<p>A partir de este notebook, realiza lo siguiente:</p>
+<ol class="arabic simple">
+<li><p>Identifica qué celdas deberían convertirse en scripts separados.</p></li>
+<li><p>Propón el contenido mínimo de un archivo <code class="docutils literal notranslate"><span class="pre">params.yaml</span></code>.</p></li>
+<li><p>Explica qué dependencias y salidas tendría la etapa de entrenamiento.</p></li>
+<li><p>Describe qué ventajas tiene ejecutar <code class="docutils literal notranslate"><span class="pre">dvc</span> <span class="pre">repro</span></code> frente a repetir manualmente las celdas del notebook.</p></li>
+</ol>
+</section>
+<section id="idea-clave-de-cierre">
+<h2>13. Idea clave de cierre<a class="headerlink" href="#idea-clave-de-cierre" title="Link to this heading">#</a></h2>
+<p>La lección central de esta unidad es la siguiente:</p>
+<blockquote>
+<div><p>DVC no solo ayuda a versionar datos; también permite pensar el proyecto como un pipeline explícito y reproducible.</p>
+</div></blockquote>
+<p>En la siguiente unidad, este flujo se conectará con el tracking de experimentos mediante MLflow.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./unidad_5"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="12_dvc_cheatsheet.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">🧾 Unidad 5: DVC Cheat Sheet</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../unidad_6/14_mlflow_fundamentos.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">📊 Unidad 6: Fundamentos de tracking de experimentos con MLflow</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objetivos-de-aprendizaje">Objetivos de aprendizaje</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#que-problema-resuelve-un-pipeline">1. ¿Qué problema resuelve un pipeline?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#etapas-del-pipeline-para-el-caso-de-regresion">2. Etapas del pipeline para el caso de regresión</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generacion-del-dataset-base">3. Generación del dataset base</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#separacion-conceptual-por-etapas">4. Separación conceptual por etapas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parametrizacion-del-modelo">5. Parametrización del modelo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entrenamiento-del-pipeline">6. Entrenamiento del pipeline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#como-se-veria-esto-en-dvc">7. ¿Cómo se vería esto en DVC?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-del-dvc-yaml">8. Interpretación del <code class="docutils literal notranslate"><span class="pre">dvc.yaml</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flujo-conceptual-completo-con-dvc">9. Flujo conceptual completo con DVC</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#que-gana-el-proyecto-con-esto">10. ¿Qué gana el proyecto con esto?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limitaciones-actuales-del-notebook">11. Limitaciones actuales del notebook</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ejercicio-guiado">12. Ejercicio guiado</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#idea-clave-de-cierre">13. Idea clave de cierre</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Maestría en Inteligencia de Negocios
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <div>
+  <p>Curso: MLOps en Python · Módulo 1</p>
+  <p>Maestría en Ciencia de Datos</p>
+</div>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

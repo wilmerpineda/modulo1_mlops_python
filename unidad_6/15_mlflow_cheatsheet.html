@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>🧾 Unidad 3: Git Cheat Sheet &#8212; MLOps en Python</title>
+    <title>🧾 Unidad 6: MLflow Cheat Sheet &#8212; MLOps en Python</title>
   
   
   
@@ -57,11 +57,11 @@
     <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'unidad_3/06_git_cheatsheet';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'unidad_6/15_mlflow_cheatsheet';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="🤝 Unidad 3: Git y GitHub: flujo de trabajo en equipo" href="07_git_github_flujo_equipo.html" />
-    <link rel="prev" title="🔧 Unidad 3: Fundamentos de Git y GitHub" href="05_git_fundamentos.html" />
+    <link rel="next" title="🔍 Unidad 6: Reproducibilidad y auditoría del proceso experimental" href="16_reproducibilidad_auditoria.html" />
+    <link rel="prev" title="📊 Unidad 6: Fundamentos de tracking de experimentos con MLflow" href="14_mlflow_fundamentos.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -195,10 +195,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../unidad_2/04_pipeline_base_regresion.html">🧪 Unidad 2: Pipeline base de regresión</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 3. Git y GitHub</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="05_git_fundamentos.html">🔧 Unidad 3: Fundamentos de Git y GitHub</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">🧾 Unidad 3: Git Cheat Sheet</a></li>
-<li class="toctree-l1"><a class="reference internal" href="07_git_github_flujo_equipo.html">🤝 Unidad 3: Git y GitHub: flujo de trabajo en equipo</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_3/05_git_fundamentos.html">🔧 Unidad 3: Fundamentos de Git y GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_3/06_git_cheatsheet.html">🧾 Unidad 3: Git Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_3/07_git_github_flujo_equipo.html">🤝 Unidad 3: Git y GitHub: flujo de trabajo en equipo</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 4. Gestión de entornos con Poetry</span></p>
 <ul class="nav bd-sidenav">
@@ -213,10 +213,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../unidad_5/13_pipeline_dvc.html">🔁 Unidad 5: Pipeline de regresión con DVC</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 6. Tracking de experimentos con MLflow</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../unidad_6/14_mlflow_fundamentos.html">📊 Unidad 6: Fundamentos de tracking de experimentos con MLflow</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../unidad_6/15_mlflow_cheatsheet.html">🧾 Unidad 6: MLflow Cheat Sheet</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../unidad_6/16_reproducibilidad_auditoria.html">🔍 Unidad 6: Reproducibilidad y auditoría del proceso experimental</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="14_mlflow_fundamentos.html">📊 Unidad 6: Fundamentos de tracking de experimentos con MLflow</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">🧾 Unidad 6: MLflow Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="16_reproducibilidad_auditoria.html">🔍 Unidad 6: Reproducibilidad y auditoría del proceso experimental</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 7. Integración del flujo MLOps</span></p>
 <ul class="nav bd-sidenav">
@@ -277,7 +277,7 @@
       
       
       
-      <li><a href="../_sources/unidad_3/06_git_cheatsheet.md" target="_blank"
+      <li><a href="../_sources/unidad_6/15_mlflow_cheatsheet.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -361,7 +361,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>🧾 Unidad 3: Git Cheat Sheet</h1>
+    <h1>🧾 Unidad 6: MLflow Cheat Sheet</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -372,45 +372,22 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proposito">🎯 Propósito</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inicializacion-de-repositorio">🚀 Inicialización de repositorio</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#git-init"><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">init</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estado-del-repositorio">📥 Estado del repositorio</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#git-status"><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">status</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#agregar-cambios">➕ Agregar cambios</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#git-add"><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#guardar-cambios">💾 Guardar cambios</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#git-commit"><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ramas">🌿 Ramas</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#git-branch"><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">branch</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#git-checkout-b"><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">-b</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cambiar-de-rama">🔄 Cambiar de rama</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#merge">🔀 Merge</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trabajo-con-github">🌍 Trabajo con GitHub</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#git-remote-add"><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">remote</span> <span class="pre">add</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#git-push"><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#git-pull"><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flujo-tipico">🔁 Flujo típico</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#instalacion">📦 Instalación</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#crear-o-seleccionar-experimento">🧪 Crear o seleccionar experimento</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#iniciar-una-ejecucion">▶️ Iniciar una ejecución</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#registrar-parametros">⚙️ Registrar parámetros</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#registrar-metricas">📏 Registrar métricas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#registrar-artefactos">📁 Registrar artefactos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#registrar-modelo">🤖 Registrar modelo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abrir-la-interfaz-local">🖥️ Abrir la interfaz local</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#buenas-practicas">🧠 Buenas prácticas</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#errores-comunes">⚠️ Errores comunes</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trabajar-en-main">1. Trabajar en <code class="docutils literal notranslate"><span class="pre">main</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#no-hacer-pull-antes-de-trabajar">2. No hacer pull antes de trabajar</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#commits-gigantes">3. Commits gigantes</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mensajes-poco-claros">4. Mensajes poco claros</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#registrar-solo-metricas">❌ Registrar solo métricas</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#no-guardar-artefactos">❌ No guardar artefactos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparar-modelos-con-datos-distintos-sin-trazabilidad">❌ Comparar modelos con datos distintos sin trazabilidad</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#idea-clave">🎯 Idea clave</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lo-que-sigue">🚀 Lo que sigue</a></li>
 </ul>
             </nav>
         </div>
@@ -422,205 +399,128 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="unidad-3-git-cheat-sheet">
-<h1>🧾 Unidad 3: Git Cheat Sheet<a class="headerlink" href="#unidad-3-git-cheat-sheet" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="unidad-6-mlflow-cheat-sheet">
+<h1>🧾 Unidad 6: MLflow Cheat Sheet<a class="headerlink" href="#unidad-6-mlflow-cheat-sheet" title="Link to this heading">#</a></h1>
 <section id="proposito">
 <h2>🎯 Propósito<a class="headerlink" href="#proposito" title="Link to this heading">#</a></h2>
-<p>Este documento resume los comandos más importantes de Git, explicando:</p>
+<p>Este documento resume los comandos y funciones más importantes para registrar experimentos con MLflow.</p>
+</section>
+<hr class="docutils" />
+<section id="instalacion">
+<h2>📦 Instalación<a class="headerlink" href="#instalacion" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>add<span class="w"> </span>mlflow
+</pre></div>
+</div>
+<p>O, si el proyecto aún no usa Poetry:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>mlflow
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="crear-o-seleccionar-experimento">
+<h2>🧪 Crear o seleccionar experimento<a class="headerlink" href="#crear-o-seleccionar-experimento" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mlflow</span>
+
+<span class="n">mlflow</span><span class="o">.</span><span class="n">set_experiment</span><span class="p">(</span><span class="s2">&quot;session_minutes_regression&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>👉 Úsalo para agrupar ejecuciones relacionadas con el mismo problema.</p>
+</section>
+<hr class="docutils" />
+<section id="iniciar-una-ejecucion">
+<h2>▶️ Iniciar una ejecución<a class="headerlink" href="#iniciar-una-ejecucion" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">mlflow</span><span class="o">.</span><span class="n">start_run</span><span class="p">():</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>👉 Todo lo que se registre dentro del bloque queda asociado a la misma ejecución.</p>
+</section>
+<hr class="docutils" />
+<section id="registrar-parametros">
+<h2>⚙️ Registrar parámetros<a class="headerlink" href="#registrar-parametros" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mlflow</span><span class="o">.</span><span class="n">log_param</span><span class="p">(</span><span class="s2">&quot;model_type&quot;</span><span class="p">,</span> <span class="s2">&quot;linear_regression&quot;</span><span class="p">)</span>
+<span class="n">mlflow</span><span class="o">.</span><span class="n">log_param</span><span class="p">(</span><span class="s2">&quot;test_size&quot;</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
+<span class="n">mlflow</span><span class="o">.</span><span class="n">log_param</span><span class="p">(</span><span class="s2">&quot;random_state&quot;</span><span class="p">,</span> <span class="mi">42</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>👉 Los parámetros explican cómo se configuró el experimento.</p>
+</section>
+<hr class="docutils" />
+<section id="registrar-metricas">
+<h2>📏 Registrar métricas<a class="headerlink" href="#registrar-metricas" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mlflow</span><span class="o">.</span><span class="n">log_metric</span><span class="p">(</span><span class="s2">&quot;mae&quot;</span><span class="p">,</span> <span class="n">mae</span><span class="p">)</span>
+<span class="n">mlflow</span><span class="o">.</span><span class="n">log_metric</span><span class="p">(</span><span class="s2">&quot;rmse&quot;</span><span class="p">,</span> <span class="n">rmse</span><span class="p">)</span>
+<span class="n">mlflow</span><span class="o">.</span><span class="n">log_metric</span><span class="p">(</span><span class="s2">&quot;r2&quot;</span><span class="p">,</span> <span class="n">r2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>👉 Las métricas permiten comparar experimentos.</p>
+</section>
+<hr class="docutils" />
+<section id="registrar-artefactos">
+<h2>📁 Registrar artefactos<a class="headerlink" href="#registrar-artefactos" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mlflow</span><span class="o">.</span><span class="n">log_artifact</span><span class="p">(</span><span class="s2">&quot;reports/metrics.json&quot;</span><span class="p">)</span>
+<span class="n">mlflow</span><span class="o">.</span><span class="n">log_artifact</span><span class="p">(</span><span class="s2">&quot;reports/residuals.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>👉 Los artefactos son archivos generados por el experimento.</p>
+</section>
+<hr class="docutils" />
+<section id="registrar-modelo">
+<h2>🤖 Registrar modelo<a class="headerlink" href="#registrar-modelo" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mlflow.sklearn</span>
+
+<span class="n">mlflow</span><span class="o">.</span><span class="n">sklearn</span><span class="o">.</span><span class="n">log_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>👉 Útil para guardar el modelo entrenado junto con el run.</p>
+</section>
+<hr class="docutils" />
+<section id="abrir-la-interfaz-local">
+<h2>🖥️ Abrir la interfaz local<a class="headerlink" href="#abrir-la-interfaz-local" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mlflow<span class="w"> </span>ui
+</pre></div>
+</div>
+<p>Por defecto, la interfaz queda disponible en:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>http://127.0.0.1:5000
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="buenas-practicas">
+<h2>🧠 Buenas prácticas<a class="headerlink" href="#buenas-practicas" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p>qué hace cada comando,</p></li>
-<li><p>cuándo usarlo,</p></li>
-<li><p>y errores comunes.</p></li>
-</ul>
-</section>
-<hr class="docutils" />
-<section id="inicializacion-de-repositorio">
-<h2>🚀 Inicialización de repositorio<a class="headerlink" href="#inicializacion-de-repositorio" title="Link to this heading">#</a></h2>
-<section id="git-init">
-<h3><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">init</span></code><a class="headerlink" href="#git-init" title="Link to this heading">#</a></h3>
-<p>Inicializa un repositorio Git en la carpeta actual.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>init
-</pre></div>
-</div>
-<p>👉 Cuándo usarlo:</p>
-<ul class="simple">
-<li><p>al iniciar un proyecto nuevo.</p></li>
-</ul>
-<p>⚠️ Error común:</p>
-<ul class="simple">
-<li><p>ejecutarlo en una carpeta incorrecta.</p></li>
-</ul>
-</section>
-</section>
-<hr class="docutils" />
-<section id="estado-del-repositorio">
-<h2>📥 Estado del repositorio<a class="headerlink" href="#estado-del-repositorio" title="Link to this heading">#</a></h2>
-<section id="git-status">
-<h3><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">status</span></code><a class="headerlink" href="#git-status" title="Link to this heading">#</a></h3>
-<p>Muestra el estado actual de los archivos.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>status
-</pre></div>
-</div>
-<p>👉 Permite ver:</p>
-<ul class="simple">
-<li><p>archivos modificados;</p></li>
-<li><p>archivos en staging;</p></li>
-<li><p>archivos no rastreados.</p></li>
-</ul>
-</section>
-</section>
-<hr class="docutils" />
-<section id="agregar-cambios">
-<h2>➕ Agregar cambios<a class="headerlink" href="#agregar-cambios" title="Link to this heading">#</a></h2>
-<section id="git-add">
-<h3><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span></code><a class="headerlink" href="#git-add" title="Link to this heading">#</a></h3>
-<p>Agrega archivos al área de staging.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>add<span class="w"> </span>archivo.py
-git<span class="w"> </span>add<span class="w"> </span>.
-</pre></div>
-</div>
-<p>👉 Cuándo usarlo:</p>
-<ul class="simple">
-<li><p>antes de hacer commit.</p></li>
-</ul>
-<p>⚠️ Error común:</p>
-<ul class="simple">
-<li><p>usar <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">.</span></code> sin revisar cambios.</p></li>
-</ul>
-</section>
-</section>
-<hr class="docutils" />
-<section id="guardar-cambios">
-<h2>💾 Guardar cambios<a class="headerlink" href="#guardar-cambios" title="Link to this heading">#</a></h2>
-<section id="git-commit">
-<h3><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span></code><a class="headerlink" href="#git-commit" title="Link to this heading">#</a></h3>
-<p>Guarda cambios en el historial.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;add preprocessing step&quot;</span>
-</pre></div>
-</div>
-<p>👉 Buenas prácticas:</p>
-<ul class="simple">
-<li><p>mensajes claros y específicos.</p></li>
-</ul>
-<p>❌ Malo:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;cambios&quot;</span>
-</pre></div>
-</div>
-</section>
-</section>
-<hr class="docutils" />
-<section id="ramas">
-<h2>🌿 Ramas<a class="headerlink" href="#ramas" title="Link to this heading">#</a></h2>
-<section id="git-branch">
-<h3><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">branch</span></code><a class="headerlink" href="#git-branch" title="Link to this heading">#</a></h3>
-<p>Lista ramas existentes.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>branch
-</pre></div>
-</div>
-</section>
-<section id="git-checkout-b">
-<h3><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">-b</span></code><a class="headerlink" href="#git-checkout-b" title="Link to this heading">#</a></h3>
-<p>Crea y cambia a una nueva rama.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>feature/model
-</pre></div>
-</div>
-<p>👉 Cuándo usarlo:</p>
-<ul class="simple">
-<li><p>para desarrollar nuevas funcionalidades.</p></li>
-</ul>
-</section>
-</section>
-<hr class="docutils" />
-<section id="cambiar-de-rama">
-<h2>🔄 Cambiar de rama<a class="headerlink" href="#cambiar-de-rama" title="Link to this heading">#</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>main
-</pre></div>
-</div>
-</section>
-<hr class="docutils" />
-<section id="merge">
-<h2>🔀 Merge<a class="headerlink" href="#merge" title="Link to this heading">#</a></h2>
-<p>Integra cambios de una rama a otra.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>merge<span class="w"> </span>feature/model
-</pre></div>
-</div>
-<p>⚠️ Puede generar conflictos.</p>
-</section>
-<hr class="docutils" />
-<section id="trabajo-con-github">
-<h2>🌍 Trabajo con GitHub<a class="headerlink" href="#trabajo-con-github" title="Link to this heading">#</a></h2>
-<section id="git-remote-add">
-<h3><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">remote</span> <span class="pre">add</span></code><a class="headerlink" href="#git-remote-add" title="Link to this heading">#</a></h3>
-<p>Conecta repositorio local con remoto.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>https://github.com/user/repo.git
-</pre></div>
-</div>
-</section>
-<hr class="docutils" />
-<section id="git-push">
-<h3><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span></code><a class="headerlink" href="#git-push" title="Link to this heading">#</a></h3>
-<p>Envía cambios al repositorio remoto.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>main
-</pre></div>
-</div>
-</section>
-<hr class="docutils" />
-<section id="git-pull">
-<h3><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span></code><a class="headerlink" href="#git-pull" title="Link to this heading">#</a></h3>
-<p>Trae cambios del repositorio remoto.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </span>main
-</pre></div>
-</div>
-</section>
-</section>
-<hr class="docutils" />
-<section id="flujo-tipico">
-<h2>🔁 Flujo típico<a class="headerlink" href="#flujo-tipico" title="Link to this heading">#</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>feature/data
-git<span class="w"> </span>add<span class="w"> </span>.
-git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;add dataset generation&quot;</span>
-git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>feature/data
-</pre></div>
-</div>
-<p>Luego:</p>
-<ul class="simple">
-<li><p>crear Pull Request en GitHub;</p></li>
-<li><p>revisión;</p></li>
-<li><p>merge a <code class="docutils literal notranslate"><span class="pre">main</span></code>.</p></li>
+<li><p>usar nombres de experimentos descriptivos;</p></li>
+<li><p>registrar siempre parámetros y métricas principales;</p></li>
+<li><p>guardar artefactos relevantes, no todos los archivos del proyecto;</p></li>
+<li><p>registrar el <code class="docutils literal notranslate"><span class="pre">random_state</span></code> cuando aplique;</p></li>
+<li><p>documentar qué métrica define el mejor modelo;</p></li>
+<li><p>conectar cada run con la versión de código y datos usada.</p></li>
 </ul>
 </section>
 <hr class="docutils" />
 <section id="errores-comunes">
 <h2>⚠️ Errores comunes<a class="headerlink" href="#errores-comunes" title="Link to this heading">#</a></h2>
-<section id="trabajar-en-main">
-<h3>1. Trabajar en <code class="docutils literal notranslate"><span class="pre">main</span></code><a class="headerlink" href="#trabajar-en-main" title="Link to this heading">#</a></h3>
-<p>👉 Evítalo siempre.</p>
+<section id="registrar-solo-metricas">
+<h3>❌ Registrar solo métricas<a class="headerlink" href="#registrar-solo-metricas" title="Link to this heading">#</a></h3>
+<p>Sin parámetros, no sabemos qué configuración produjo el resultado.</p>
 </section>
-<section id="no-hacer-pull-antes-de-trabajar">
-<h3>2. No hacer pull antes de trabajar<a class="headerlink" href="#no-hacer-pull-antes-de-trabajar" title="Link to this heading">#</a></h3>
-<p>👉 Puede generar conflictos.</p>
+<hr class="docutils" />
+<section id="no-guardar-artefactos">
+<h3>❌ No guardar artefactos<a class="headerlink" href="#no-guardar-artefactos" title="Link to this heading">#</a></h3>
+<p>Sin artefactos, se pierde evidencia como gráficos, reportes o modelos.</p>
 </section>
-<section id="commits-gigantes">
-<h3>3. Commits gigantes<a class="headerlink" href="#commits-gigantes" title="Link to this heading">#</a></h3>
-<p>👉 Difíciles de revisar.</p>
-</section>
-<section id="mensajes-poco-claros">
-<h3>4. Mensajes poco claros<a class="headerlink" href="#mensajes-poco-claros" title="Link to this heading">#</a></h3>
-<p>👉 Pierden trazabilidad.</p>
+<hr class="docutils" />
+<section id="comparar-modelos-con-datos-distintos-sin-trazabilidad">
+<h3>❌ Comparar modelos con datos distintos sin trazabilidad<a class="headerlink" href="#comparar-modelos-con-datos-distintos-sin-trazabilidad" title="Link to this heading">#</a></h3>
+<p>Si cambia el dataset y no queda registrado, la comparación puede ser injusta.</p>
 </section>
 </section>
 <hr class="docutils" />
 <section id="idea-clave">
 <h2>🎯 Idea clave<a class="headerlink" href="#idea-clave" title="Link to this heading">#</a></h2>
 <blockquote>
-<div><p>Git no es memorizar comandos.<br />
-Es entender el flujo de trabajo.</p>
+<div><p>MLflow no mejora el modelo por sí solo. Mejora la trazabilidad del proceso experimental.</p>
 </div></blockquote>
-</section>
-<hr class="docutils" />
-<section id="lo-que-sigue">
-<h2>🚀 Lo que sigue<a class="headerlink" href="#lo-que-sigue" title="Link to this heading">#</a></h2>
-<p>👉 Flujo colaborativo con GitHub (notebook práctico)</p>
 </section>
 </section>
 
@@ -637,7 +537,7 @@ Es entender el flujo de trabajo.</p>
         },
         kernelOptions: {
             name: "python3",
-            path: "./unidad_3"
+            path: "./unidad_6"
         },
         predefinedOutput: true
     }
@@ -655,20 +555,20 @@ Es entender el flujo de trabajo.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="05_git_fundamentos.html"
+       href="14_mlflow_fundamentos.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">🔧 Unidad 3: Fundamentos de Git y GitHub</p>
+        <p class="prev-next-title">📊 Unidad 6: Fundamentos de tracking de experimentos con MLflow</p>
       </div>
     </a>
     <a class="right-next"
-       href="07_git_github_flujo_equipo.html"
+       href="16_reproducibilidad_auditoria.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">🤝 Unidad 3: Git y GitHub: flujo de trabajo en equipo</p>
+        <p class="prev-next-title">🔍 Unidad 6: Reproducibilidad y auditoría del proceso experimental</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -689,45 +589,22 @@ Es entender el flujo de trabajo.</p>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proposito">🎯 Propósito</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inicializacion-de-repositorio">🚀 Inicialización de repositorio</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#git-init"><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">init</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estado-del-repositorio">📥 Estado del repositorio</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#git-status"><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">status</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#agregar-cambios">➕ Agregar cambios</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#git-add"><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#guardar-cambios">💾 Guardar cambios</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#git-commit"><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ramas">🌿 Ramas</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#git-branch"><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">branch</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#git-checkout-b"><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">-b</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cambiar-de-rama">🔄 Cambiar de rama</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#merge">🔀 Merge</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trabajo-con-github">🌍 Trabajo con GitHub</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#git-remote-add"><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">remote</span> <span class="pre">add</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#git-push"><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#git-pull"><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flujo-tipico">🔁 Flujo típico</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#instalacion">📦 Instalación</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#crear-o-seleccionar-experimento">🧪 Crear o seleccionar experimento</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#iniciar-una-ejecucion">▶️ Iniciar una ejecución</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#registrar-parametros">⚙️ Registrar parámetros</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#registrar-metricas">📏 Registrar métricas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#registrar-artefactos">📁 Registrar artefactos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#registrar-modelo">🤖 Registrar modelo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abrir-la-interfaz-local">🖥️ Abrir la interfaz local</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#buenas-practicas">🧠 Buenas prácticas</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#errores-comunes">⚠️ Errores comunes</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trabajar-en-main">1. Trabajar en <code class="docutils literal notranslate"><span class="pre">main</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#no-hacer-pull-antes-de-trabajar">2. No hacer pull antes de trabajar</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#commits-gigantes">3. Commits gigantes</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mensajes-poco-claros">4. Mensajes poco claros</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#registrar-solo-metricas">❌ Registrar solo métricas</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#no-guardar-artefactos">❌ No guardar artefactos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparar-modelos-con-datos-distintos-sin-trazabilidad">❌ Comparar modelos con datos distintos sin trazabilidad</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#idea-clave">🎯 Idea clave</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lo-que-sigue">🚀 Lo que sigue</a></li>
 </ul>
   </nav></div>
 
