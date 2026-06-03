@@ -2,11 +2,7 @@
 
 ## 🌍 El problema que Git no resuelve
 
-En la unidad anterior vimos cómo Git permite versionar código.
-
-Sin embargo, en proyectos de Machine Learning, el código no es el único elemento crítico.
-
-También existen:
+En la unidad anterior vimos cómo Git permite versionar código. Sin embargo, en proyectos de Machine Learning el código no es el único elemento crítico, porque los resultados dependen también de archivos que suelen ser grandes, cambiantes y difíciles de almacenar dentro del historial de Git:
 
 - datasets;
 - archivos intermedios;
@@ -17,7 +13,7 @@ También existen:
 
 ## ⚠️ ¿Por qué no usar Git para datos?
 
-Podríamos pensar:
+Podríamos pensar que Git puede resolverlo todo:
 
 > “si Git versiona código, también puede versionar datos”
 
@@ -32,9 +28,7 @@ Pero esto genera problemas importantes:
 
 ## 🧠 El problema real
 
-En Machine Learning, los resultados dependen directamente de los datos.
-
-Si no versionamos los datos:
+En Machine Learning, los resultados dependen directamente de los datos. Si no versionamos los datos, una métrica puede cambiar sin que sepamos si la causa fue el código, el dataset, el preprocesamiento o una combinación de todos esos factores:
 
 - no sabemos con qué dataset se entrenó el modelo;
 - no podemos reproducir resultados;
@@ -56,7 +50,7 @@ flowchart LR
 
 ## 🚀 ¿Qué es DVC?
 
-DVC (*Data Version Control*) es una herramienta que permite:
+DVC (*Data Version Control*) es una herramienta que permite conectar el versionamiento de datos con el flujo de Git. Su objetivo es mantener el repositorio liviano, pero conservar la trazabilidad necesaria para reproducir experimentos:
 
 - versionar datos sin almacenarlos directamente en Git;
 - rastrear cambios en datasets;
@@ -67,7 +61,7 @@ DVC (*Data Version Control*) es una herramienta que permite:
 
 ## 🎯 ¿Qué resuelve DVC?
 
-DVC permite:
+DVC permite que el equipo trabaje con datos y artefactos grandes sin perder control sobre qué versión se usó en cada experimento:
 
 - asociar datasets a commits de Git;
 - reproducir pipelines completos;
@@ -78,9 +72,7 @@ DVC permite:
 
 ## 🧩 ¿Cómo funciona DVC?
 
-DVC no guarda los datos directamente en Git.
-
-En su lugar:
+DVC no guarda los datos directamente en Git. En su lugar, separa los archivos pesados de los metadatos que describen su ubicación y contenido:
 
 - crea archivos `.dvc` que actúan como punteros;
 - los datos se almacenan en un sistema externo;
@@ -104,7 +96,7 @@ flowchart LR
 
 ### 🔹 `.dvc`
 
-Archivo que referencia un dataset.
+Un archivo `.dvc` referencia un dataset o artefacto concreto. Git versiona este archivo pequeño, mientras DVC se encarga del contenido real.
 
 Ejemplo conceptual:
 
@@ -118,9 +110,7 @@ outs:
 
 ### 🔹 `dvc.yaml`
 
-Define pipelines.
-
-Permite estructurar etapas como:
+`dvc.yaml` define pipelines y permite estructurar etapas encadenadas. Cada etapa puede declarar dependencias, comandos y salidas:
 
 - procesamiento;
 - entrenamiento;
@@ -217,6 +207,14 @@ En este módulo:
 
 > 💡 En Machine Learning, versionar código no es suficiente.  
 > También debemos versionar los datos.
+
+---
+
+## 📚 Lecturas recomendadas
+
+* [DVC documentation - Get started](https://dvc.org/doc/start)
+* [DVC documentation - Data pipelines](https://dvc.org/doc/start/data-pipelines/data-pipelines)
+* [DVC documentation - Defining pipelines](https://dvc.org/doc/user-guide/pipelines/defining-pipelines)
 
 ---
 

@@ -10,15 +10,18 @@ parts:
     chapters:
     - file: unidad_1/01_panorama_mlops
     - file: unidad_1/02_de_notebook_a_sistema
+      title: "🧪 Unidad 1: De notebook a sistema"
   - caption: Unidad 2. Ciclo de vida del modelo
     chapters:
     - file: unidad_2/03_ciclo_vida_modelo
     - file: unidad_2/04_pipeline_base_regresion
+      title: "🧪 Unidad 2: Pipeline base de regresión"
   - caption: "Unidad 3. Git y GitHub"
     chapters:
       - file: unidad_3/05_git_fundamentos
       - file: unidad_3/06_git_cheatsheet
       - file: unidad_3/07_git_github_flujo_equipo
+        title: "🤝 Unidad 3: Git y GitHub: flujo de trabajo en equipo"
   - caption: "Unidad 4. Gestión de entornos con Poetry"
     chapters:
       - file: unidad_4/08_poetry_fundamentos
@@ -29,3 +32,13 @@ parts:
       - file: unidad_5/11_dvc_fundamentos
       - file: unidad_5/12_dvc_cheatsheet
       - file: unidad_5/13_pipeline_dvc
+  - caption: "Unidad 6. Tracking de experimentos con MLflow"
+    chapters:
+      - file: unidad_6/14_mlflow_fundamentos
+      - file: unidad_6/15_mlflow_cheatsheet
+      - file: unidad_6/16_reproducibilidad_auditoria
+  - caption: "Unidad 7. Integración del flujo MLOps"
+    chapters:
+      - file: unidad_7/17_estructura_proyecto_ml
+      - file: unidad_7/18_ecosistema_herramientas
+      - file: unidad_7/19_checklist_modulo

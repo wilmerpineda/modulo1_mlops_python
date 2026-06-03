@@ -2,10 +2,7 @@
 
 ## 👋 Bienvenido(a)
 
-Bienvenido(a) al primer módulo del curso **MLOps en Python**.
-
-En este espacio comenzarás a construir una de las competencias más importantes en la práctica moderna de la ciencia de datos:
-👉 **pasar de modelos experimentales a sistemas reproducibles, versionados y desplegables.**
+Bienvenido(a) al primer módulo del curso **MLOps en Python**. En este espacio comenzarás a construir una de las competencias más importantes en la práctica moderna de la ciencia de datos: **pasar de modelos experimentales a sistemas reproducibles, versionados y desplegables**.
 
 A lo largo de este módulo, no solo aprenderás herramientas, sino que desarrollarás una forma de pensar el ciclo de vida completo de un modelo de Machine Learning.
 
@@ -30,7 +27,7 @@ para construir soluciones que sean:
 
 ## 🧠 ¿Por qué MLOps?
 
-En muchos proyectos de ciencia de datos, el proceso termina en un notebook con buenos resultados. Sin embargo, en entornos reales esto no es suficiente.
+En muchos proyectos de ciencia de datos, el proceso termina en un notebook con buenos resultados. Sin embargo, en entornos reales esto no es suficiente, porque el valor del modelo depende de que pueda ejecutarse nuevamente, revisarse por otras personas, integrarse con sistemas existentes y mantenerse cuando cambian los datos.
 
 Un modelo en producción requiere:
 
@@ -40,9 +37,7 @@ Un modelo en producción requiere:
 * reproducibilidad de resultados;
 * colaboración entre múltiples actores.
 
-👉 Aquí es donde entra MLOps.
-
-Este módulo te permitirá cerrar la brecha entre el prototipo y el sistema.
+Aquí es donde entra MLOps: como un conjunto de prácticas que conecta la exploración analítica con la operación confiable de modelos. Este módulo te permitirá cerrar la brecha entre el prototipo que funciona en una máquina local y el sistema que puede ser entendido, reproducido y mejorado por un equipo.
 
 ---
 
@@ -59,29 +54,29 @@ Encontrarás dos tipos de contenidos:
 
 ### 📄 Secciones conceptuales
 
-Explican los fundamentos teóricos y las buenas prácticas.
+Explican los fundamentos teóricos y las buenas prácticas necesarias para tomar decisiones técnicas con criterio, no solo para ejecutar comandos.
 
 ### 💻 Notebooks prácticos
 
-Permiten ejecutar código, explorar herramientas y construir piezas del flujo MLOps.
+Permiten ejecutar código, explorar herramientas y construir piezas del flujo MLOps de manera incremental, conectando cada concepto con una acción concreta sobre el proyecto.
 
 ---
 
 ## 📊 Caso de estudio transversal
 
-Durante todo el módulo trabajaremos sobre un caso aplicado:
+Durante todo el módulo trabajaremos sobre un caso aplicado que servirá como hilo conductor:
 
-> **Predicción de Open Rate en notificaciones digitales**
+> **Predicción del tiempo de permanencia de usuarios en una plataforma digital**
 
 Este caso será el hilo conductor para:
 
 * construir datasets simulados;
-* entrenar modelos de clasificación;
+* entrenar modelos de regresión;
 * versionar datos y código;
 * registrar experimentos;
 * y estructurar un proyecto reproducible.
 
-👉 Este mismo caso será la base de la **actividad integradora del módulo**.
+Este mismo caso será la base de la **actividad integradora del módulo**, por lo que conviene leer cada unidad pensando en cómo sus herramientas y decisiones se reflejan en ese proyecto final.
 
 ---
 
@@ -100,7 +95,7 @@ El objetivo no es solo usarlas, sino entender **cuándo, por qué y cómo integr
 
 ## 🧪 Metodología de trabajo
 
-Este módulo está diseñado bajo un enfoque activo:
+Este módulo está diseñado bajo un enfoque activo. La lectura conceptual introduce el problema, los notebooks permiten observarlo en código y la actividad integradora exige conectar ambas dimensiones en un flujo reproducible:
 
 1. Lectura guiada del material
 2. Ejecución de notebooks
@@ -150,11 +145,6 @@ Te recomendamos seguir el orden propuesto en el contenido:
 
 ## 🎓 Cierre
 
-Este módulo marca un punto de transición importante:
-
-👉 de escribir código que funciona
-👉 a construir sistemas que pueden mantenerse, escalar y colaborar
+Este módulo marca un punto de transición importante: pasar de escribir código que funciona en un contexto individual a construir sistemas que pueden mantenerse, escalar y sostener colaboración técnica.
 
 Bienvenido(a) a MLOps.
-
----
