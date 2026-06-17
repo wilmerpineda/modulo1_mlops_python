@@ -1,0 +1,20 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# DVC-managed or generated outputs.
+/data/raw/*.csv
+/data/processed/*.csv
+/models/
+/reports/
+/mlruns/
+/mlflow.db
+/mlflow.db-shm
+/mlflow.db-wal
+/dvc_remote/
+
+# DVC internals that should stay local.
+/.dvc/cache/
+/.dvc/tmp/
+/.dvc/config.local

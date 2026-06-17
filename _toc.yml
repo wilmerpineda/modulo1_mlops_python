@@ -42,3 +42,4 @@ parts:
       - file: unidad_7/17_estructura_proyecto_ml
       - file: unidad_7/18_ecosistema_herramientas
       - file: unidad_7/19_checklist_modulo
+      - file: unidad_7/20_ejemplo_end_to_end_dvc_mlflow

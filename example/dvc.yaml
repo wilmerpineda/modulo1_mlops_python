@@ -1,0 +1,52 @@
+stages:
+  generate_data:
+    cmd: python -m session_duration.generate_data --params params.yaml
+    deps:
+      - src/session_duration/generate_data.py
+      - params.yaml
+    params:
+      - data.n_samples
+      - data.random_state
+      - data.noise_std
+      - data.raw_path
+    outs:
+      - data/raw/session_data.csv
+
+  prepare_data:
+    cmd: python -m session_duration.prepare_data --params params.yaml
+    deps:
+      - src/session_duration/prepare_data.py
+      - data/raw/session_data.csv
+      - params.yaml
+    params:
+      - split.test_size
+      - split.random_state
+      - data.raw_path
+      - data.processed_train_path
+      - data.processed_test_path
+    outs:
+      - data/processed/train.csv
+      - data/processed/test.csv
+
+  train_model:
+    cmd: python -m session_duration.train --params params.yaml
+    deps:
+      - src/session_duration/train.py
+      - data/processed/train.csv
+      - data/processed/test.csv
+      - params.yaml
+    params:
+      - model.type
+      - model.random_state
+      - model.n_estimators
+      - model.max_depth
+      - mlflow.tracking_uri
+      - mlflow.experiment_name
+    outs:
+      - models/regression_model.joblib
+      - reports/predictions.csv
+      - reports/predicted_vs_actual.png
+    metrics:
+      - reports/metrics.json:
+          cache: false
+

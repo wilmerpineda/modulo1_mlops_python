@@ -1,0 +1,99 @@
+schema: '2.0'
+stages:
+  generate_data:
+    cmd: python -m session_duration.generate_data --params params.yaml
+    deps:
+    - path: params.yaml
+      hash: md5
+      md5: 6ecea1964e2e12ac8ca75b095eb1bd84
+      size: 413
+    - path: src/session_duration/generate_data.py
+      hash: md5
+      md5: 87f8dd4cd82cef60ad1c94a3b968b446
+      size: 2994
+    params:
+      params.yaml:
+        data.n_samples: 1500
+        data.noise_std: 4.5
+        data.random_state: 42
+        data.raw_path: data/raw/session_data.csv
+    outs:
+    - path: data/raw/session_data.csv
+      hash: md5
+      md5: c07a00cd330e5b65a3b09fb24aac0815
+      size: 98919
+  prepare_data:
+    cmd: python -m session_duration.prepare_data --params params.yaml
+    deps:
+    - path: data/raw/session_data.csv
+      hash: md5
+      md5: c07a00cd330e5b65a3b09fb24aac0815
+      size: 98919
+    - path: params.yaml
+      hash: md5
+      md5: 6ecea1964e2e12ac8ca75b095eb1bd84
+      size: 413
+    - path: src/session_duration/prepare_data.py
+      hash: md5
+      md5: 78e564b80c617f5c7b55e16fbbbd3b6b
+      size: 1269
+    params:
+      params.yaml:
+        data.processed_test_path: data/processed/test.csv
+        data.processed_train_path: data/processed/train.csv
+        data.raw_path: data/raw/session_data.csv
+        split.random_state: 42
+        split.test_size: 0.2
+    outs:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 763ae8d6096e5b6414d3f912ccf111d1
+      size: 19707
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 9b5114c73a8a48161ea14ccf2c393180
+      size: 79217
+  train_model:
+    cmd: python -m session_duration.train --params params.yaml
+    deps:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 763ae8d6096e5b6414d3f912ccf111d1
+      size: 19707
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 9b5114c73a8a48161ea14ccf2c393180
+      size: 79217
+    - path: params.yaml
+      hash: md5
+      md5: 6ecea1964e2e12ac8ca75b095eb1bd84
+      size: 413
+    - path: src/session_duration/train.py
+      hash: md5
+      md5: 619f819c636b05794b3cb9a350003bc0
+      size: 5595
+    params:
+      params.yaml:
+        mlflow.experiment_name: session_minutes_regression
+        mlflow.tracking_uri: sqlite:///mlflow.db
+        model.max_depth: 8
+        model.n_estimators: 120
+        model.random_state: 42
+        model.type: random_forest
+    outs:
+    - path: models/regression_model.joblib
+      hash: md5
+      md5: 1f16918feaeedd8810bd738201355cce
+      size: 3590915
+    - path: reports/metrics.json
+      hash: md5
+      md5: ed6963d7cda6fb11072571f0b14e208d
+      size: 91
+    - path: reports/predicted_vs_actual.png
+      hash: md5
+      md5: 9b128e136d3594c5861c0ee9de09a8fb
+      size: 76539
+    - path: reports/predictions.csv
+      hash: md5
+      md5: a6c5acb699b3d5f6051d7c98786e71ed
+      size: 7657

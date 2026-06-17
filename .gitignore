@@ -10,3 +10,4 @@ __pycache__/
 # Entorno virtual (si usas Poetry configurado en local)
 .venv/
 poetry.lock
+!example/poetry.lock
