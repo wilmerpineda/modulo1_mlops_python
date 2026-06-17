@@ -1,0 +1,1539 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Unidad 7: Ejemplo end-to-end con DVC y MLflow &#8212; MLOps en Python</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = `pre.mermaid {
+    /* Same as .mermaid-container > pre */
+    display: block;
+    width: 100%;
+}
+
+pre.mermaid > svg {
+    /* Same as .mermaid-container > pre > svg */
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}`;
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = `.mermaid-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.mermaid-container > pre {
+    display: block;
+    width: 100%;
+}
+
+.mermaid-container > pre > svg {
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}
+
+.mermaid-fullscreen-btn {
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+    color: #333;
+}
+
+.mermaid-fullscreen-btn:hover {
+    opacity: 100% !important;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-btn.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-btn.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal {
+    display: none;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 95vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 9999;
+    padding: 20px;
+    overflow: auto;
+}
+
+.mermaid-fullscreen-modal.dark-theme {
+    background: rgba(0, 0, 0, 0.98);
+}
+
+.mermaid-fullscreen-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen {
+    position: relative;
+    width: 95vw;
+    height: 90vh;
+    max-width: 95vw;
+    max-height: 90vh;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen.dark-theme {
+    background: #1a1a1a;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.mermaid-container-fullscreen pre.mermaid {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen .mermaid svg {
+    height: 100% !important;
+    width: 100% !important;
+    cursor: grab;
+}
+
+.mermaid-fullscreen-close {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s;
+    font-size: 24px;
+    line-height: 1;
+    color: #333;
+}
+
+.mermaid-fullscreen-close:hover {
+    background: white;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-close.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-close.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
+    display: none !important;
+}`;
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        all_mermaids.forEach((el) => {
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+        await mermaid.run();
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+
+    if ("False" === "True") {
+        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("");
+            if(all_mermaids.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            } else if(svgs.size() !== mermaids_to_add_zoom) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            } else {
+                svgs.each(function() {
+                    var svg = d3.select(this);
+                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+                    var inner = svg.select("g");
+                    var zoom = d3.zoom().on("zoom", function(event) {
+                        inner.attr("transform", event.transform);
+                    });
+                    svg.call(zoom);
+                });
+            }
+        }
+    } else if(all_mermaids.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if ("True" !== "True") return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    const closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = '⛶';
+        fullscreenBtn.style.opacity = '50%';
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scroll, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.sdisplay = 'block';
+
+                if ("False" === "True") {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+const load = async () => {
+    initStyles();
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...JSON.parse(
+                    `{"startOnLoad": false}`
+                ),
+                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...JSON.parse(
+        `{"startOnLoad": false}`
+    ),
+    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    }
+);
+
+window.addEventListener("load", load);</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'unidad_7/20_ejemplo_end_to_end_dvc_mlflow';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="✅ Unidad 7: Checklist integrador del módulo" href="19_checklist_modulo.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo_santoto.png" class="logo__image only-light" alt="MLOps en Python - Home"/>
+    <script>document.write(`<img src="../_static/logo_santoto.png" class="logo__image only-dark" alt="MLOps en Python - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    📘 Módulo 1: Fundamentos de MLOps y Gestión del Ciclo de Vida
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Resultados de Aprendizaje y Caso de Estudio</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../resultados_aprendizaje.html">🎯 Resultados de Aprendizaje del Módulo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../caso_estudio.html">🧩 Caso de Estudio: Predicción del Tiempo de Permanencia de Usuarios</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 1. Introducción a MLOps</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_1/01_panorama_mlops.html">🧭 Unidad 1: Panorama de MLOps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_1/02_de_notebook_a_sistema.html">🧪 Unidad 1: De notebook a sistema</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 2. Ciclo de vida del modelo</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_2/03_ciclo_vida_modelo.html">🔄 Unidad 2: Ciclo de Vida de un Modelo de Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_2/04_pipeline_base_regresion.html">🧪 Unidad 2: Pipeline base de regresión</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 3. Git y GitHub</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_3/05_git_fundamentos.html">🔧 Unidad 3: Fundamentos de Git y GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_3/06_git_cheatsheet.html">🧾 Unidad 3: Git Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_3/07_git_github_flujo_equipo.html">🤝 Unidad 3: Git y GitHub: flujo de trabajo en equipo</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 4. Gestión de entornos con Poetry</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_4/08_poetry_fundamentos.html">📦 Unidad 4: Fundamentos de gestión de entornos con Poetry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_4/09_poetry_cheatsheet.html">🧾 Unidad 4: Poetry Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_4/10_entornos_reproducibles.html">🔁 Unidad 4: Entornos reproducibles en proyectos de Machine Learning</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 5. Reproducibilidad con DVC</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_5/11_dvc_fundamentos.html">📦 Unidad 5: Fundamentos de versionamiento de datos con DVC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_5/12_dvc_cheatsheet.html">🧾 Unidad 5: DVC Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_5/13_pipeline_dvc.html">🔁 Unidad 5: Pipeline de regresión con DVC</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 6. Tracking de experimentos con MLflow</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_6/14_mlflow_fundamentos.html">📊 Unidad 6: Fundamentos de tracking de experimentos con MLflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_6/15_mlflow_cheatsheet.html">🧾 Unidad 6: MLflow Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_6/16_reproducibilidad_auditoria.html">🔍 Unidad 6: Reproducibilidad y auditoría del proceso experimental</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 7. Integración del flujo MLOps</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="17_estructura_proyecto_ml.html">🗂️ Unidad 7: Estructuración profesional de proyectos de Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="18_ecosistema_herramientas.html">🧰 Unidad 7: Ecosistema de herramientas MLOps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="19_checklist_modulo.html">✅ Unidad 7: Checklist integrador del módulo</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Unidad 7: Ejemplo end-to-end con DVC y MLflow</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/unidad_7/20_ejemplo_end_to_end_dvc_mlflow.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Unidad 7: Ejemplo end-to-end con DVC y MLflow</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proposito">Propósito</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mapa-general-del-flujo">1. Mapa general del flujo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estructura-del-ejemplo">2. Estructura del ejemplo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparar-el-ambiente-con-poetry">3. Preparar el ambiente con Poetry</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generar-datos-mock">4. Generar datos mock</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#como-usa-dvc-este-ejemplo">5. Cómo usa DVC este ejemplo</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-declarado">Pipeline declarado</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ejecutar-el-pipeline-completo">6. Ejecutar el pipeline completo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#que-registra-dvc">7. Qué registra DVC</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#remoto-local-de-dvc">8. Remoto local de DVC</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#como-usa-mlflow-este-ejemplo">9. Cómo usa MLflow este ejemplo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abrir-la-interfaz-de-mlflow">10. Abrir la interfaz de MLflow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas-registradas">11. Métricas registradas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-usados">12. Modelos usados</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-regression"><code class="docutils literal notranslate"><span class="pre">linear_regression</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#random-forest"><code class="docutils literal notranslate"><span class="pre">random_forest</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#que-debe-observar-el-estudiante">13. Qué debe observar el estudiante</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#que-debe-entregar-el-estudiante">14. Qué debe entregar el estudiante</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#errores-comunes">15. Errores comunes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#usar-dvc-add-sobre-una-salida-del-pipeline">Usar <code class="docutils literal notranslate"><span class="pre">dvc</span> <span class="pre">add</span></code> sobre una salida del pipeline</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#no-versionar-dvc-lock">No versionar <code class="docutils literal notranslate"><span class="pre">dvc.lock</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#registrar-metricas-sin-parametros">Registrar métricas sin parámetros</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparar-modelos-con-datos-distintos-sin-control">Comparar modelos con datos distintos sin control</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#idea-clave">Idea clave</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="unidad-7-ejemplo-end-to-end-con-dvc-y-mlflow">
+<h1>Unidad 7: Ejemplo end-to-end con DVC y MLflow<a class="headerlink" href="#unidad-7-ejemplo-end-to-end-con-dvc-y-mlflow" title="Link to this heading">#</a></h1>
+<section id="proposito">
+<h2>Propósito<a class="headerlink" href="#proposito" title="Link to this heading">#</a></h2>
+<p>Esta guía muestra cómo reproducir el ejemplo completo ubicado en la carpeta <code class="docutils literal notranslate"><span class="pre">example/</span></code>.</p>
+<p>El objetivo no es solo ejecutar comandos. La idea es entender cómo se conectan las piezas de un flujo MLOps mínimo:</p>
+<ul class="simple">
+<li><p>Poetry prepara un ambiente reproducible;</p></li>
+<li><p>DVC genera, versiona y reproduce datos y artefactos;</p></li>
+<li><p>MLflow registra experimentos, métricas, modelos y resultados.</p></li>
+</ul>
+<p>El caso sigue la temática del módulo: un problema de regresión para predecir <code class="docutils literal notranslate"><span class="pre">session_minutes</span></code>, es decir, el tiempo de permanencia de un usuario en una plataforma digital.</p>
+</section>
+<hr class="docutils" />
+<section id="mapa-general-del-flujo">
+<h2>1. Mapa general del flujo<a class="headerlink" href="#mapa-general-del-flujo" title="Link to this heading">#</a></h2>
+<pre  class="mermaid">
+        flowchart LR
+    A[params.yaml] --&gt; B[Generar datos mock]
+    B --&gt; C[data/raw/session_data.csv]
+    C --&gt; D[Preparar train/test]
+    D --&gt; E[data/processed]
+    E --&gt; F[Entrenar modelo]
+    F --&gt; G[reports/metrics.json]
+    F --&gt; H[models/regression_model.joblib]
+    F --&gt; I[MLflow]
+    G --&gt; J[DVC]
+    H --&gt; J
+    </pre><p>La lectura importante es esta:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">params.yaml</span></code> controla los parámetros del ejercicio;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dvc.yaml</span></code> define las etapas reproducibles;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dvc.lock</span></code> registra qué versión exacta de entradas y salidas produjo el resultado;</p></li>
+<li><p>MLflow guarda la historia de experimentos para comparar ejecuciones.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="estructura-del-ejemplo">
+<h2>2. Estructura del ejemplo<a class="headerlink" href="#estructura-del-ejemplo" title="Link to this heading">#</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>example/
+├── README.md
+├── pyproject.toml
+├── poetry.lock
+├── poetry.toml
+├── params.yaml
+├── dvc.yaml
+├── dvc.lock
+├── data/
+│   ├── raw/
+│   └── processed/
+├── models/
+├── reports/
+├── src/
+│   └── session_duration/
+│       ├── generate_data.py
+│       ├── prepare_data.py
+│       └── train.py
+└── tests/
+</pre></div>
+</div>
+<p>Cada carpeta cumple un rol:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Carpeta o archivo</p></th>
+<th class="head"><p>Propósito</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code></p></td>
+<td><p>Declara dependencias del proyecto</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">poetry.lock</span></code></p></td>
+<td><p>Fija versiones exactas del ambiente</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">poetry.toml</span></code></p></td>
+<td><p>Hace que el ambiente <code class="docutils literal notranslate"><span class="pre">.venv/</span></code> viva dentro de <code class="docutils literal notranslate"><span class="pre">example/</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">params.yaml</span></code></p></td>
+<td><p>Centraliza parámetros de datos, split, modelo y MLflow</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dvc.yaml</span></code></p></td>
+<td><p>Define el pipeline reproducible</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dvc.lock</span></code></p></td>
+<td><p>Registra hashes de entradas y salidas</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">src/</span></code></p></td>
+<td><p>Contiene el código ejecutable</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">data/</span></code></p></td>
+<td><p>Guarda datos crudos y procesados generados por el pipeline</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">models/</span></code></p></td>
+<td><p>Guarda el modelo serializado</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">reports/</span></code></p></td>
+<td><p>Guarda métricas, predicciones y gráficos</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="preparar-el-ambiente-con-poetry">
+<h2>3. Preparar el ambiente con Poetry<a class="headerlink" href="#preparar-el-ambiente-con-poetry" title="Link to this heading">#</a></h2>
+<p>Desde la raíz del repositorio:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>example
+</pre></div>
+</div>
+<p>Verifica Poetry:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>--version
+</pre></div>
+</div>
+<p>Instala el ambiente:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>install
+</pre></div>
+</div>
+<p>En este ejemplo el ambiente queda dentro de:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>example/.venv/
+</pre></div>
+</div>
+<p>Esto ocurre porque <code class="docutils literal notranslate"><span class="pre">poetry.toml</span></code> define:</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="k">[virtualenvs]</span>
+<span class="n">in-project</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</pre></div>
+</div>
+<p>Esta decisión ayuda a los estudiantes porque todo lo necesario para ejecutar el ejemplo queda contenido en la carpeta <code class="docutils literal notranslate"><span class="pre">example/</span></code>.</p>
+</section>
+<hr class="docutils" />
+<section id="generar-datos-mock">
+<h2>4. Generar datos mock<a class="headerlink" href="#generar-datos-mock" title="Link to this heading">#</a></h2>
+<p>El primer script crea un dataset simulado:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>session_duration.generate_data<span class="w"> </span>--params<span class="w"> </span>params.yaml
+</pre></div>
+</div>
+<p>Salida esperada:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>data/raw/session_data.csv
+</pre></div>
+</div>
+<p>El dataset contiene variables como:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Descripción</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">segment</span></code></p></td>
+<td><p>Tipo de usuario</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">historical_avg_session_minutes</span></code></p></td>
+<td><p>Promedio histórico de duración</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">historical_sessions_last_7d</span></code></p></td>
+<td><p>Sesiones recientes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">days_since_last_session</span></code></p></td>
+<td><p>Días desde la última sesión</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hour_of_day</span></code></p></td>
+<td><p>Hora de la sesión</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">entry_point</span></code></p></td>
+<td><p>Punto de entrada a la plataforma</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">push_received_last_24h</span></code></p></td>
+<td><p>Si recibió notificación reciente</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">session_minutes</span></code></p></td>
+<td><p>Variable objetivo</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>La variable objetivo es:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>session_minutes
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="como-usa-dvc-este-ejemplo">
+<h2>5. Cómo usa DVC este ejemplo<a class="headerlink" href="#como-usa-dvc-este-ejemplo" title="Link to this heading">#</a></h2>
+<p>DVC puede usarse de dos maneras principales:</p>
+<ol class="arabic simple">
+<li><p>versionar archivos estáticos con <code class="docutils literal notranslate"><span class="pre">dvc</span> <span class="pre">add</span></code>;</p></li>
+<li><p>declarar pipelines reproducibles con <code class="docutils literal notranslate"><span class="pre">dvc.yaml</span></code>.</p></li>
+</ol>
+<p>En este ejemplo usamos principalmente la segunda forma, porque los datos mock se generan mediante código.</p>
+<section id="pipeline-declarado">
+<h3>Pipeline declarado<a class="headerlink" href="#pipeline-declarado" title="Link to this heading">#</a></h3>
+<p>El archivo <code class="docutils literal notranslate"><span class="pre">dvc.yaml</span></code> define tres etapas:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>generate_data -&gt; prepare_data -&gt; train_model
+</pre></div>
+</div>
+<p>Cada etapa declara:</p>
+<ul class="simple">
+<li><p>comando a ejecutar;</p></li>
+<li><p>dependencias;</p></li>
+<li><p>parámetros;</p></li>
+<li><p>salidas.</p></li>
+</ul>
+<p>Ejemplo conceptual:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">stages</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">generate_data</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python -m session_duration.generate_data --params params.yaml</span>
+<span class="w">    </span><span class="nt">deps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">src/session_duration/generate_data.py</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">params.yaml</span>
+<span class="w">    </span><span class="nt">outs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">data/raw/session_data.csv</span>
+</pre></div>
+</div>
+<p>DVC sabe que si cambia <code class="docutils literal notranslate"><span class="pre">params.yaml</span></code> o <code class="docutils literal notranslate"><span class="pre">generate_data.py</span></code>, debe volver a generar el dataset.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="ejecutar-el-pipeline-completo">
+<h2>6. Ejecutar el pipeline completo<a class="headerlink" href="#ejecutar-el-pipeline-completo" title="Link to this heading">#</a></h2>
+<p>Ejecuta:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>dvc<span class="w"> </span>repro
+</pre></div>
+</div>
+<p>DVC revisa dependencias y ejecuta solo lo necesario.</p>
+<p>Si todo corre correctamente, se generan:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>data/raw/session_data.csv
+data/processed/train.csv
+data/processed/test.csv
+models/regression_model.joblib
+reports/metrics.json
+reports/predictions.csv
+reports/predicted_vs_actual.png
+mlflow.db
+mlruns/
+</pre></div>
+</div>
+<p>Después de ejecutar, revisa el estado:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>dvc<span class="w"> </span>status
+</pre></div>
+</div>
+<p>Resultado esperado:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Data and pipelines are up to date.
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="que-registra-dvc">
+<h2>7. Qué registra DVC<a class="headerlink" href="#que-registra-dvc" title="Link to this heading">#</a></h2>
+<p>DVC registra la relación entre:</p>
+<ul class="simple">
+<li><p>código;</p></li>
+<li><p>parámetros;</p></li>
+<li><p>datos;</p></li>
+<li><p>modelos;</p></li>
+<li><p>reportes.</p></li>
+</ul>
+<p>El archivo clave es:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>dvc.lock
+</pre></div>
+</div>
+<p>Este archivo permite responder:</p>
+<ul class="simple">
+<li><p>¿qué datos se usaron?;</p></li>
+<li><p>¿qué código produjo el modelo?;</p></li>
+<li><p>¿qué parámetros estaban activos?;</p></li>
+<li><p>¿qué salidas generó el pipeline?</p></li>
+</ul>
+<p>En proyectos reales, <code class="docutils literal notranslate"><span class="pre">dvc.lock</span></code> debe versionarse con Git.</p>
+</section>
+<hr class="docutils" />
+<section id="remoto-local-de-dvc">
+<h2>8. Remoto local de DVC<a class="headerlink" href="#remoto-local-de-dvc" title="Link to this heading">#</a></h2>
+<p>Para practicar sin nube ni credenciales, el ejemplo usa un remoto local:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>dvc<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>-d<span class="w"> </span>localremote<span class="w"> </span>./dvc_remote
+python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>dvc<span class="w"> </span>push
+</pre></div>
+</div>
+<p>Esto crea una carpeta:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>example/dvc_remote/
+</pre></div>
+</div>
+<p>Esa carpeta simula un almacenamiento externo. En una empresa podría ser S3, Azure Blob Storage, Google Cloud Storage o Google Drive.</p>
+<p>Para recuperar artefactos versionados desde el remoto:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>dvc<span class="w"> </span>pull
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="como-usa-mlflow-este-ejemplo">
+<h2>9. Cómo usa MLflow este ejemplo<a class="headerlink" href="#como-usa-mlflow-este-ejemplo" title="Link to this heading">#</a></h2>
+<p>La etapa <code class="docutils literal notranslate"><span class="pre">train_model</span></code> registra el experimento en MLflow.</p>
+<p>El código hace cuatro cosas:</p>
+<ul class="simple">
+<li><p>define el experimento;</p></li>
+<li><p>entrena el modelo;</p></li>
+<li><p>registra parámetros y métricas;</p></li>
+<li><p>guarda artefactos y el modelo.</p></li>
+</ul>
+<p>Ejemplo conceptual:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mlflow</span><span class="o">.</span><span class="n">set_tracking_uri</span><span class="p">(</span><span class="s2">&quot;sqlite:///mlflow.db&quot;</span><span class="p">)</span>
+<span class="n">mlflow</span><span class="o">.</span><span class="n">set_experiment</span><span class="p">(</span><span class="s2">&quot;session_minutes_regression&quot;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">mlflow</span><span class="o">.</span><span class="n">start_run</span><span class="p">(</span><span class="n">run_name</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]):</span>
+    <span class="n">mlflow</span><span class="o">.</span><span class="n">log_params</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+    <span class="n">mlflow</span><span class="o">.</span><span class="n">log_metrics</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+    <span class="n">mlflow</span><span class="o">.</span><span class="n">log_artifact</span><span class="p">(</span><span class="s2">&quot;reports/metrics.json&quot;</span><span class="p">)</span>
+    <span class="n">mlflow</span><span class="o">.</span><span class="n">sklearn</span><span class="o">.</span><span class="n">log_model</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>En este ejemplo se usa SQLite como backend local:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>sqlite:///mlflow.db
+</pre></div>
+</div>
+<p>Esto es compatible con MLflow 3.x y mantiene los resultados dentro de la carpeta <code class="docutils literal notranslate"><span class="pre">example/</span></code>.</p>
+</section>
+<hr class="docutils" />
+<section id="abrir-la-interfaz-de-mlflow">
+<h2>10. Abrir la interfaz de MLflow<a class="headerlink" href="#abrir-la-interfaz-de-mlflow" title="Link to this heading">#</a></h2>
+<p>Ejecuta:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>mlflow<span class="w"> </span>ui<span class="w"> </span>--backend-store-uri<span class="w"> </span>sqlite:///mlflow.db
+</pre></div>
+</div>
+<p>Abre en el navegador:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>http://127.0.0.1:5000
+</pre></div>
+</div>
+<p>Dentro de MLflow puedes revisar:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Sección</p></th>
+<th class="head"><p>Qué muestra</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Experiments</p></td>
+<td><p>Lista de experimentos</p></td>
+</tr>
+<tr class="row-odd"><td><p>Runs</p></td>
+<td><p>Ejecuciones individuales</p></td>
+</tr>
+<tr class="row-even"><td><p>Parameters</p></td>
+<td><p>Configuración del experimento</p></td>
+</tr>
+<tr class="row-odd"><td><p>Metrics</p></td>
+<td><p>Resultados cuantitativos</p></td>
+</tr>
+<tr class="row-even"><td><p>Artifacts</p></td>
+<td><p>Archivos asociados al run</p></td>
+</tr>
+<tr class="row-odd"><td><p>Models</p></td>
+<td><p>Modelo registrado como artefacto</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="metricas-registradas">
+<h2>11. Métricas registradas<a class="headerlink" href="#metricas-registradas" title="Link to this heading">#</a></h2>
+<p>El ejemplo registra tres métricas de regresión:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Métrica</p></th>
+<th class="head"><p>Interpretación</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mae</span></code></p></td>
+<td><p>Error absoluto promedio</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rmse</span></code></p></td>
+<td><p>Penaliza más los errores grandes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">r2</span></code></p></td>
+<td><p>Proporción de variabilidad explicada</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Ejemplo de salida:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;mae&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">4.153789407341469</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;rmse&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.074841679560861</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;r2&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.6564498742147427</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Para este problema, un mejor modelo debería tender a:</p>
+<ul class="simple">
+<li><p>menor <code class="docutils literal notranslate"><span class="pre">mae</span></code>;</p></li>
+<li><p>menor <code class="docutils literal notranslate"><span class="pre">rmse</span></code>;</p></li>
+<li><p>mayor <code class="docutils literal notranslate"><span class="pre">r2</span></code>.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="modelos-usados">
+<h2>12. Modelos usados<a class="headerlink" href="#modelos-usados" title="Link to this heading">#</a></h2>
+<p>El ejemplo permite comparar dos tipos de modelo.</p>
+<section id="linear-regression">
+<h3><code class="docutils literal notranslate"><span class="pre">linear_regression</span></code><a class="headerlink" href="#linear-regression" title="Link to this heading">#</a></h3>
+<p>Modelo lineal base.</p>
+<p>Útil para:</p>
+<ul class="simple">
+<li><p>tener una línea de referencia;</p></li>
+<li><p>explicar relaciones simples;</p></li>
+<li><p>comparar contra modelos más flexibles.</p></li>
+</ul>
+<p>Configuración:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">linear_regression</span>
+<span class="w">  </span><span class="nt">random_state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">42</span>
+<span class="w">  </span><span class="nt">n_estimators</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">120</span>
+<span class="w">  </span><span class="nt">max_depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+</pre></div>
+</div>
+<p>En este caso <code class="docutils literal notranslate"><span class="pre">n_estimators</span></code> y <code class="docutils literal notranslate"><span class="pre">max_depth</span></code> no afectan a la regresión lineal, pero se mantienen en <code class="docutils literal notranslate"><span class="pre">params.yaml</span></code> para que el archivo conserve una estructura simple.</p>
+</section>
+<section id="random-forest">
+<h3><code class="docutils literal notranslate"><span class="pre">random_forest</span></code><a class="headerlink" href="#random-forest" title="Link to this heading">#</a></h3>
+<p>Modelo basado en árboles.</p>
+<p>Útil para:</p>
+<ul class="simple">
+<li><p>capturar relaciones no lineales;</p></li>
+<li><p>manejar interacciones entre variables;</p></li>
+<li><p>obtener un modelo más fuerte como baseline práctico.</p></li>
+</ul>
+<p>Configuración:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">random_forest</span>
+<span class="w">  </span><span class="nt">random_state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">42</span>
+<span class="w">  </span><span class="nt">n_estimators</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">120</span>
+<span class="w">  </span><span class="nt">max_depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+</pre></div>
+</div>
+<p>Después de cambiar el modelo, ejecuta:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>dvc<span class="w"> </span>repro
+</pre></div>
+</div>
+<p>Luego abre MLflow y compara los runs.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="que-debe-observar-el-estudiante">
+<h2>13. Qué debe observar el estudiante<a class="headerlink" href="#que-debe-observar-el-estudiante" title="Link to this heading">#</a></h2>
+<p>Después de ejecutar el flujo, el estudiante debería poder responder:</p>
+<ul class="simple">
+<li><p>¿qué etapa genera los datos mock?;</p></li>
+<li><p>¿qué archivo define el pipeline?;</p></li>
+<li><p>¿qué archivo registra el estado exacto del pipeline?;</p></li>
+<li><p>¿qué parámetros afectan al modelo?;</p></li>
+<li><p>¿dónde se guardan las métricas?;</p></li>
+<li><p>¿cómo se comparan dos ejecuciones en MLflow?;</p></li>
+<li><p>¿qué archivos deben ir a Git y cuáles no?</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="que-debe-entregar-el-estudiante">
+<h2>14. Qué debe entregar el estudiante<a class="headerlink" href="#que-debe-entregar-el-estudiante" title="Link to this heading">#</a></h2>
+<p>Para un ejercicio aplicado, una entrega mínima debería incluir:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> y <code class="docutils literal notranslate"><span class="pre">poetry.lock</span></code>;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">params.yaml</span></code>;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dvc.yaml</span></code> y <code class="docutils literal notranslate"><span class="pre">dvc.lock</span></code>;</p></li>
+<li><p>scripts en <code class="docutils literal notranslate"><span class="pre">src/</span></code>;</p></li>
+<li><p>evidencia de ejecución de <code class="docutils literal notranslate"><span class="pre">dvc</span> <span class="pre">repro</span></code>;</p></li>
+<li><p>captura o resumen de runs en MLflow;</p></li>
+<li><p>comparación de al menos dos ejecuciones;</p></li>
+<li><p>explicación de qué modelo seleccionaría y por qué.</p></li>
+</ul>
+<p>La comparación debe incluir al menos:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Run</p></th>
+<th class="head"><p>Modelo</p></th>
+<th class="head"><p>MAE</p></th>
+<th class="head"><p>RMSE</p></th>
+<th class="head"><p>R2</p></th>
+<th class="head"><p>Comentario</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">linear_regression</span></code></p></td>
+<td><p>valor</p></td>
+<td><p>valor</p></td>
+<td><p>valor</p></td>
+<td><p>baseline</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">random_forest</span></code></p></td>
+<td><p>valor</p></td>
+<td><p>valor</p></td>
+<td><p>valor</p></td>
+<td><p>modelo alternativo</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="errores-comunes">
+<h2>15. Errores comunes<a class="headerlink" href="#errores-comunes" title="Link to this heading">#</a></h2>
+<section id="usar-dvc-add-sobre-una-salida-del-pipeline">
+<h3>Usar <code class="docutils literal notranslate"><span class="pre">dvc</span> <span class="pre">add</span></code> sobre una salida del pipeline<a class="headerlink" href="#usar-dvc-add-sobre-una-salida-del-pipeline" title="Link to this heading">#</a></h3>
+<p>No uses:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dvc<span class="w"> </span>add<span class="w"> </span>data/raw/session_data.csv
+</pre></div>
+</div>
+<p>en este ejemplo, porque <code class="docutils literal notranslate"><span class="pre">session_data.csv</span></code> ya está declarado como salida de <code class="docutils literal notranslate"><span class="pre">generate_data</span></code> en <code class="docutils literal notranslate"><span class="pre">dvc.yaml</span></code>.</p>
+<p>Usa <code class="docutils literal notranslate"><span class="pre">dvc</span> <span class="pre">add</span></code> para datasets externos que no son generados por el pipeline.</p>
+</section>
+<section id="no-versionar-dvc-lock">
+<h3>No versionar <code class="docutils literal notranslate"><span class="pre">dvc.lock</span></code><a class="headerlink" href="#no-versionar-dvc-lock" title="Link to this heading">#</a></h3>
+<p>Si no se versiona <code class="docutils literal notranslate"><span class="pre">dvc.lock</span></code>, se pierde parte de la trazabilidad del pipeline.</p>
+</section>
+<section id="registrar-metricas-sin-parametros">
+<h3>Registrar métricas sin parámetros<a class="headerlink" href="#registrar-metricas-sin-parametros" title="Link to this heading">#</a></h3>
+<p>Una métrica sola no explica cómo se obtuvo el resultado. MLflow debe registrar también parámetros como:</p>
+<ul class="simple">
+<li><p>tipo de modelo;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">random_state</span></code>;</p></li>
+<li><p>tamaño del dataset;</p></li>
+<li><p>proporción de test;</p></li>
+<li><p>hiperparámetros.</p></li>
+</ul>
+</section>
+<section id="comparar-modelos-con-datos-distintos-sin-control">
+<h3>Comparar modelos con datos distintos sin control<a class="headerlink" href="#comparar-modelos-con-datos-distintos-sin-control" title="Link to this heading">#</a></h3>
+<p>Si cambia el dataset, la comparación puede dejar de ser justa. Por eso DVC y MLflow deben usarse juntos:</p>
+<ul class="simple">
+<li><p>DVC controla datos y outputs;</p></li>
+<li><p>MLflow controla experimentos.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="idea-clave">
+<h2>Idea clave<a class="headerlink" href="#idea-clave" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><p>Un flujo reproducible no depende de recordar qué se ejecutó. Depende de dejar explícitos el ambiente, los datos, el pipeline, los parámetros y los experimentos.</p>
+</div></blockquote>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./unidad_7"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="19_checklist_modulo.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">✅ Unidad 7: Checklist integrador del módulo</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proposito">Propósito</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mapa-general-del-flujo">1. Mapa general del flujo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estructura-del-ejemplo">2. Estructura del ejemplo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparar-el-ambiente-con-poetry">3. Preparar el ambiente con Poetry</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generar-datos-mock">4. Generar datos mock</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#como-usa-dvc-este-ejemplo">5. Cómo usa DVC este ejemplo</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-declarado">Pipeline declarado</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ejecutar-el-pipeline-completo">6. Ejecutar el pipeline completo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#que-registra-dvc">7. Qué registra DVC</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#remoto-local-de-dvc">8. Remoto local de DVC</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#como-usa-mlflow-este-ejemplo">9. Cómo usa MLflow este ejemplo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abrir-la-interfaz-de-mlflow">10. Abrir la interfaz de MLflow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas-registradas">11. Métricas registradas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-usados">12. Modelos usados</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-regression"><code class="docutils literal notranslate"><span class="pre">linear_regression</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#random-forest"><code class="docutils literal notranslate"><span class="pre">random_forest</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#que-debe-observar-el-estudiante">13. Qué debe observar el estudiante</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#que-debe-entregar-el-estudiante">14. Qué debe entregar el estudiante</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#errores-comunes">15. Errores comunes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#usar-dvc-add-sobre-una-salida-del-pipeline">Usar <code class="docutils literal notranslate"><span class="pre">dvc</span> <span class="pre">add</span></code> sobre una salida del pipeline</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#no-versionar-dvc-lock">No versionar <code class="docutils literal notranslate"><span class="pre">dvc.lock</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#registrar-metricas-sin-parametros">Registrar métricas sin parámetros</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparar-modelos-con-datos-distintos-sin-control">Comparar modelos con datos distintos sin control</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#idea-clave">Idea clave</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Maestría en Inteligencia de Negocios
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <div>
+  <p>Curso: MLOps en Python · Módulo 1</p>
+  <p>Maestría en Ciencia de Datos</p>
+</div>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

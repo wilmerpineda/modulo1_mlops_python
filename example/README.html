@@ -1,0 +1,752 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Ejemplo end-to-end: Poetry, DVC y MLflow &#8212; MLOps en Python</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'example/README';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo_santoto.png" class="logo__image only-light" alt="MLOps en Python - Home"/>
+    <script>document.write(`<img src="../_static/logo_santoto.png" class="logo__image only-dark" alt="MLOps en Python - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    📘 Módulo 1: Fundamentos de MLOps y Gestión del Ciclo de Vida
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Resultados de Aprendizaje y Caso de Estudio</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../resultados_aprendizaje.html">🎯 Resultados de Aprendizaje del Módulo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../caso_estudio.html">🧩 Caso de Estudio: Predicción del Tiempo de Permanencia de Usuarios</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 1. Introducción a MLOps</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_1/01_panorama_mlops.html">🧭 Unidad 1: Panorama de MLOps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_1/02_de_notebook_a_sistema.html">🧪 Unidad 1: De notebook a sistema</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 2. Ciclo de vida del modelo</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_2/03_ciclo_vida_modelo.html">🔄 Unidad 2: Ciclo de Vida de un Modelo de Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_2/04_pipeline_base_regresion.html">🧪 Unidad 2: Pipeline base de regresión</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 3. Git y GitHub</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_3/05_git_fundamentos.html">🔧 Unidad 3: Fundamentos de Git y GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_3/06_git_cheatsheet.html">🧾 Unidad 3: Git Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_3/07_git_github_flujo_equipo.html">🤝 Unidad 3: Git y GitHub: flujo de trabajo en equipo</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 4. Gestión de entornos con Poetry</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_4/08_poetry_fundamentos.html">📦 Unidad 4: Fundamentos de gestión de entornos con Poetry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_4/09_poetry_cheatsheet.html">🧾 Unidad 4: Poetry Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_4/10_entornos_reproducibles.html">🔁 Unidad 4: Entornos reproducibles en proyectos de Machine Learning</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 5. Reproducibilidad con DVC</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_5/11_dvc_fundamentos.html">📦 Unidad 5: Fundamentos de versionamiento de datos con DVC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_5/12_dvc_cheatsheet.html">🧾 Unidad 5: DVC Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_5/13_pipeline_dvc.html">🔁 Unidad 5: Pipeline de regresión con DVC</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 6. Tracking de experimentos con MLflow</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_6/14_mlflow_fundamentos.html">📊 Unidad 6: Fundamentos de tracking de experimentos con MLflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_6/15_mlflow_cheatsheet.html">🧾 Unidad 6: MLflow Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_6/16_reproducibilidad_auditoria.html">🔍 Unidad 6: Reproducibilidad y auditoría del proceso experimental</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Unidad 7. Integración del flujo MLOps</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../unidad_7/17_estructura_proyecto_ml.html">🗂️ Unidad 7: Estructuración profesional de proyectos de Machine Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_7/18_ecosistema_herramientas.html">🧰 Unidad 7: Ecosistema de herramientas MLOps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_7/19_checklist_modulo.html">✅ Unidad 7: Checklist integrador del módulo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../unidad_7/20_ejemplo_end_to_end_dvc_mlflow.html">Unidad 7: Ejemplo end-to-end con DVC y MLflow</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/example/README.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Ejemplo end-to-end: Poetry, DVC y MLflow</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#requisitos">1. Requisitos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#crear-el-ambiente-con-poetry">2. Crear el ambiente con Poetry</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inicializar-dvc-dentro-de-example">3. Inicializar DVC dentro de <code class="docutils literal notranslate"><span class="pre">example</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generar-datos-mock-manualmente">4. Generar datos mock manualmente</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#asociar-los-datos-al-repositorio-con-dvc">5. Asociar los datos al repositorio con DVC</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#alternativa-asociar-un-dataset-estatico-con-dvc-add">Alternativa: asociar un dataset estatico con <code class="docutils literal notranslate"><span class="pre">dvc</span> <span class="pre">add</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configurar-un-remoto-local-de-dvc">6. Configurar un remoto local de DVC</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ejecutar-el-pipeline-completo-con-dvc">7. Ejecutar el pipeline completo con DVC</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ejecutar-scripts-manualmente">8. Ejecutar scripts manualmente</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#revisar-resultados-con-mlflow">9. Revisar resultados con MLflow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pruebas">10. Pruebas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#que-debe-quedar-versionado">11. Que debe quedar versionado</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="ejemplo-end-to-end-poetry-dvc-y-mlflow">
+<h1>Ejemplo end-to-end: Poetry, DVC y MLflow<a class="headerlink" href="#ejemplo-end-to-end-poetry-dvc-y-mlflow" title="Link to this heading">#</a></h1>
+<p>Esta carpeta contiene un proyecto pequeno de regresion para practicar un flujo MLOps reproducible. El objetivo es predecir <code class="docutils literal notranslate"><span class="pre">session_minutes</span></code>, el tiempo de permanencia de un usuario en una plataforma digital.</p>
+<p>El ejemplo conecta tres ideas:</p>
+<ul class="simple">
+<li><p>Poetry controla el ambiente de Python.</p></li>
+<li><p>DVC versiona datos y ejecuta el pipeline.</p></li>
+<li><p>MLflow registra parametros, metricas, modelos y artefactos.</p></li>
+</ul>
+<section id="requisitos">
+<h2>1. Requisitos<a class="headerlink" href="#requisitos" title="Link to this heading">#</a></h2>
+<p>Ejecuta todos los comandos desde esta carpeta:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>example
+</pre></div>
+</div>
+<p>Verifica que Poetry este disponible:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>--version
+</pre></div>
+</div>
+<p>Si <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">--version</span></code> falla por un launcher roto, usa <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">poetry</span></code> en todos los comandos. En Windows esto suele evitar problemas cuando Poetry fue instalado con otra version de Python.</p>
+<p>El proyecto esta ajustado para Python <code class="docutils literal notranslate"><span class="pre">&gt;=3.14,&lt;3.15</span></code>. Las dependencias usan versiones compatibles con ese rango; en particular, <code class="docutils literal notranslate"><span class="pre">pandas</span></code> se mantiene en <code class="docutils literal notranslate"><span class="pre">&gt;=2.3,&lt;3.0</span></code> porque MLflow 3.x todavia declara <code class="docutils literal notranslate"><span class="pre">pandas</span> <span class="pre">&lt;3</span></code>.</p>
+<p>Si tienes varias versiones instaladas, selecciona Python 3.14 antes de instalar:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>env<span class="w"> </span>use<span class="w"> </span><span class="m">3</span>.14
+</pre></div>
+</div>
+<p>El archivo <code class="docutils literal notranslate"><span class="pre">poetry.toml</span></code> deja configurado que el entorno virtual se cree dentro de esta carpeta como <code class="docutils literal notranslate"><span class="pre">.venv/</span></code>.</p>
+</section>
+<section id="crear-el-ambiente-con-poetry">
+<h2>2. Crear el ambiente con Poetry<a class="headerlink" href="#crear-el-ambiente-con-poetry" title="Link to this heading">#</a></h2>
+<p>Instala las dependencias declaradas en <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>install
+</pre></div>
+</div>
+<p>Si <code class="docutils literal notranslate"><span class="pre">poetry.lock</span></code> aun no existe, Poetry lo generara al resolver dependencias. Tambien puedes crearlo explicitamente con:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>lock
+</pre></div>
+</div>
+<p>Opcionalmente, crea el entorno virtual dentro del proyecto:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>config<span class="w"> </span>virtualenvs.in-project<span class="w"> </span><span class="nb">true</span><span class="w"> </span>--local
+python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>install
+</pre></div>
+</div>
+<p>Comprueba que el paquete local se puede importar:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import session_duration; print(&#39;ok&#39;)&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="inicializar-dvc-dentro-de-example">
+<h2>3. Inicializar DVC dentro de <code class="docutils literal notranslate"><span class="pre">example</span></code><a class="headerlink" href="#inicializar-dvc-dentro-de-example" title="Link to this heading">#</a></h2>
+<p>Este repositorio ya tiene Git en la raiz del material del curso. Por eso el ejemplo usa DVC como subproyecto:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>dvc<span class="w"> </span>init<span class="w"> </span>--subdir
+</pre></div>
+</div>
+<p>Esto crea la carpeta <code class="docutils literal notranslate"><span class="pre">.dvc/</span></code> dentro de <code class="docutils literal notranslate"><span class="pre">example/</span></code>. Git debe versionar la configuracion de DVC, pero no el cache interno.</p>
+</section>
+<section id="generar-datos-mock-manualmente">
+<h2>4. Generar datos mock manualmente<a class="headerlink" href="#generar-datos-mock-manualmente" title="Link to this heading">#</a></h2>
+<p>El dataset se genera con parametros de <code class="docutils literal notranslate"><span class="pre">params.yaml</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>session_duration.generate_data<span class="w"> </span>--params<span class="w"> </span>params.yaml
+</pre></div>
+</div>
+<p>Salida esperada:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>data/raw/session_data.csv
+</pre></div>
+</div>
+<p>El archivo contiene variables como <code class="docutils literal notranslate"><span class="pre">segment</span></code>, <code class="docutils literal notranslate"><span class="pre">historical_avg_session_minutes</span></code>, <code class="docutils literal notranslate"><span class="pre">hour_of_day</span></code>, <code class="docutils literal notranslate"><span class="pre">entry_point</span></code> y la variable objetivo <code class="docutils literal notranslate"><span class="pre">session_minutes</span></code>.</p>
+</section>
+<section id="asociar-los-datos-al-repositorio-con-dvc">
+<h2>5. Asociar los datos al repositorio con DVC<a class="headerlink" href="#asociar-los-datos-al-repositorio-con-dvc" title="Link to this heading">#</a></h2>
+<p>En este ejemplo los datos mock son una salida declarada del pipeline:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">stages</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">generate_data</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">outs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">data/raw/session_data.csv</span>
+</pre></div>
+</div>
+<p>Eso significa que DVC asociara el archivo al repositorio cuando ejecutes:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>dvc<span class="w"> </span>repro
+</pre></div>
+</div>
+<p>Despues de la primera ejecucion, DVC creara o actualizara <code class="docutils literal notranslate"><span class="pre">dvc.lock</span></code>. Ese archivo registra la version exacta de los datos, dependencias y salidas del pipeline.</p>
+<p>Git debe versionar:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>add<span class="w"> </span>example/dvc.yaml<span class="w"> </span>example/dvc.lock<span class="w"> </span>example/params.yaml
+git<span class="w"> </span>add<span class="w"> </span>example/src<span class="w"> </span>example/tests<span class="w"> </span>example/README.md<span class="w"> </span>example/pyproject.toml
+</pre></div>
+</div>
+<p>La regla practica es:</p>
+<ul class="simple">
+<li><p>Git versiona codigo, configuracion y metadatos.</p></li>
+<li><p>DVC versiona el contenido de los datos y artefactos declarados como salidas.</p></li>
+</ul>
+<section id="alternativa-asociar-un-dataset-estatico-con-dvc-add">
+<h3>Alternativa: asociar un dataset estatico con <code class="docutils literal notranslate"><span class="pre">dvc</span> <span class="pre">add</span></code><a class="headerlink" href="#alternativa-asociar-un-dataset-estatico-con-dvc-add" title="Link to this heading">#</a></h3>
+<p>Si recibes un CSV externo que no sera generado por el pipeline, puedes asociarlo con <code class="docutils literal notranslate"><span class="pre">dvc</span> <span class="pre">add</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>dvc<span class="w"> </span>add<span class="w"> </span>data/raw/dataset_externo.csv
+</pre></div>
+</div>
+<p>DVC crea un archivo pequeno:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>data/raw/dataset_externo.csv.dvc
+</pre></div>
+</div>
+<p>Ese archivo es el puntero que Git debe versionar:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>add<span class="w"> </span>example/data/raw/dataset_externo.csv.dvc<span class="w"> </span>example/data/raw/.gitignore
+</pre></div>
+</div>
+<p>No uses <code class="docutils literal notranslate"><span class="pre">dvc</span> <span class="pre">add</span></code> sobre <code class="docutils literal notranslate"><span class="pre">data/raw/session_data.csv</span></code> en este proyecto, porque ese archivo ya pertenece a la etapa <code class="docutils literal notranslate"><span class="pre">generate_data</span></code> de <code class="docutils literal notranslate"><span class="pre">dvc.yaml</span></code>.</p>
+</section>
+</section>
+<section id="configurar-un-remoto-local-de-dvc">
+<h2>6. Configurar un remoto local de DVC<a class="headerlink" href="#configurar-un-remoto-local-de-dvc" title="Link to this heading">#</a></h2>
+<p>Para practicar <code class="docutils literal notranslate"><span class="pre">dvc</span> <span class="pre">push</span></code> y <code class="docutils literal notranslate"><span class="pre">dvc</span> <span class="pre">pull</span></code> sin credenciales de nube:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>dvc<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>-d<span class="w"> </span>localremote<span class="w"> </span>./dvc_remote
+python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>dvc<span class="w"> </span>push
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">dvc_remote/</span></code> simula un almacenamiento externo. En un proyecto real podria reemplazarse por S3, Azure Blob Storage, Google Drive u otro backend.</p>
+<p>Para recuperar datos versionados:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>dvc<span class="w"> </span>pull
+</pre></div>
+</div>
+</section>
+<section id="ejecutar-el-pipeline-completo-con-dvc">
+<h2>7. Ejecutar el pipeline completo con DVC<a class="headerlink" href="#ejecutar-el-pipeline-completo-con-dvc" title="Link to this heading">#</a></h2>
+<p>El pipeline esta definido en <code class="docutils literal notranslate"><span class="pre">dvc.yaml</span></code> y tiene tres etapas:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">generate_data</span></code>: crea <code class="docutils literal notranslate"><span class="pre">data/raw/session_data.csv</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">prepare_data</span></code>: separa train y test en <code class="docutils literal notranslate"><span class="pre">data/processed/</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">train_model</span></code>: entrena el modelo, guarda metricas y registra el experimento en MLflow.</p></li>
+</ul>
+<p>Ejecuta todo:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>dvc<span class="w"> </span>repro
+</pre></div>
+</div>
+<p>Archivos generados:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>data/raw/session_data.csv
+data/processed/train.csv
+data/processed/test.csv
+models/regression_model.joblib
+reports/metrics.json
+reports/predictions.csv
+reports/predicted_vs_actual.png
+mlruns/
+mlflow.db
+</pre></div>
+</div>
+<p>Si cambias <code class="docutils literal notranslate"><span class="pre">params.yaml</span></code>, DVC detecta que etapas deben repetirse:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>dvc<span class="w"> </span>status
+python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>dvc<span class="w"> </span>repro
+</pre></div>
+</div>
+</section>
+<section id="ejecutar-scripts-manualmente">
+<h2>8. Ejecutar scripts manualmente<a class="headerlink" href="#ejecutar-scripts-manualmente" title="Link to this heading">#</a></h2>
+<p>Tambien puedes correr cada paso sin DVC para entender el flujo:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>session_duration.generate_data<span class="w"> </span>--params<span class="w"> </span>params.yaml
+python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>session_duration.prepare_data<span class="w"> </span>--params<span class="w"> </span>params.yaml
+python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>session_duration.train<span class="w"> </span>--params<span class="w"> </span>params.yaml
+</pre></div>
+</div>
+<p>Este modo sirve para depurar. Para reproducibilidad, usa <code class="docutils literal notranslate"><span class="pre">dvc</span> <span class="pre">repro</span></code>.</p>
+</section>
+<section id="revisar-resultados-con-mlflow">
+<h2>9. Revisar resultados con MLflow<a class="headerlink" href="#revisar-resultados-con-mlflow" title="Link to this heading">#</a></h2>
+<p>Abre la interfaz local:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>mlflow<span class="w"> </span>ui<span class="w"> </span>--backend-store-uri<span class="w"> </span>sqlite:///mlflow.db
+</pre></div>
+</div>
+<p>Luego visita:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>http://127.0.0.1:5000
+</pre></div>
+</div>
+<p>En MLflow podras revisar:</p>
+<ul class="simple">
+<li><p>parametros del modelo y del dataset;</p></li>
+<li><p>metricas <code class="docutils literal notranslate"><span class="pre">mae</span></code>, <code class="docutils literal notranslate"><span class="pre">rmse</span></code> y <code class="docutils literal notranslate"><span class="pre">r2</span></code>;</p></li>
+<li><p>artefactos como <code class="docutils literal notranslate"><span class="pre">metrics.json</span></code>, predicciones, grafico y modelo serializado;</p></li>
+<li><p>comparacion entre ejecuciones.</p></li>
+</ul>
+<p>Para comparar modelos, cambia en <code class="docutils literal notranslate"><span class="pre">params.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">linear_regression</span>
+</pre></div>
+</div>
+<p>Despues ejecuta:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>dvc<span class="w"> </span>repro
+</pre></div>
+</div>
+<p>Vuelve a MLflow y compara el nuevo run contra el anterior.</p>
+</section>
+<section id="pruebas">
+<h2>10. Pruebas<a class="headerlink" href="#pruebas" title="Link to this heading">#</a></h2>
+<p>Ejecuta las pruebas basicas:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>poetry<span class="w"> </span>run<span class="w"> </span>pytest
+</pre></div>
+</div>
+<p>Las pruebas validan contratos minimos del ejemplo:</p>
+<ul class="simple">
+<li><p>el dataset mock contiene las columnas esperadas;</p></li>
+<li><p>existe la variable objetivo <code class="docutils literal notranslate"><span class="pre">session_minutes</span></code>;</p></li>
+<li><p>las metricas de regresion conservan nombres esperados.</p></li>
+</ul>
+</section>
+<section id="que-debe-quedar-versionado">
+<h2>11. Que debe quedar versionado<a class="headerlink" href="#que-debe-quedar-versionado" title="Link to this heading">#</a></h2>
+<p>Versiona en Git:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>README.md
+pyproject.toml
+poetry.lock
+params.yaml
+dvc.yaml
+dvc.lock
+.dvc/config
+src/
+tests/
+</pre></div>
+</div>
+<p>No versiones en Git:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>data/raw/session_data.csv
+data/processed/
+models/
+reports/
+mlruns/
+mlflow.db
+dvc_remote/
+.venv/
+</pre></div>
+</div>
+<p>DVC y MLflow se encargan de conectar esos artefactos con una ejecucion reproducible.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./example"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#requisitos">1. Requisitos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#crear-el-ambiente-con-poetry">2. Crear el ambiente con Poetry</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inicializar-dvc-dentro-de-example">3. Inicializar DVC dentro de <code class="docutils literal notranslate"><span class="pre">example</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generar-datos-mock-manualmente">4. Generar datos mock manualmente</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#asociar-los-datos-al-repositorio-con-dvc">5. Asociar los datos al repositorio con DVC</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#alternativa-asociar-un-dataset-estatico-con-dvc-add">Alternativa: asociar un dataset estatico con <code class="docutils literal notranslate"><span class="pre">dvc</span> <span class="pre">add</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configurar-un-remoto-local-de-dvc">6. Configurar un remoto local de DVC</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ejecutar-el-pipeline-completo-con-dvc">7. Ejecutar el pipeline completo con DVC</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ejecutar-scripts-manualmente">8. Ejecutar scripts manualmente</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#revisar-resultados-con-mlflow">9. Revisar resultados con MLflow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pruebas">10. Pruebas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#que-debe-quedar-versionado">11. Que debe quedar versionado</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Maestría en Inteligencia de Negocios
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <div>
+  <p>Curso: MLOps en Python · Módulo 1</p>
+  <p>Maestría en Ciencia de Datos</p>
+</div>
+
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
